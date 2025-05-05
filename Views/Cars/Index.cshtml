@@ -1,0 +1,214 @@
+@model IEnumerable<identityApp.Models.Car>
+
+@{
+    ViewData["Title"] = "Araçlar";
+}
+
+<h1>Araçlar</h1>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Message"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4>Filtrele</h4>
+            </div>
+            <div class="card-body">
+                <form method="get" class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Marka</label>
+                        <select name="brand" class="form-select" asp-items="ViewBag.Brands">
+                            <option value="">Tümü</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Model</label>
+                        <input type="text" name="model" class="form-control" value="@ViewBag.CurrentModel" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Renk</label>
+                        <input type="text" name="color" class="form-control" value="@ViewBag.CurrentColor" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Kategori</label>
+                        <select name="carTypeId" class="form-select" asp-items="ViewBag.CarTypes">
+                            <option value="">Tümü</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Yakıt Tipi</label>
+                        <select name="fuelType" class="form-select" asp-items="ViewBag.FuelTypes">
+                            <option value="">Tümü</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Şanzıman</label>
+                        <select name="transmission" class="form-select" asp-items="ViewBag.Transmissions">
+                            <option value="">Tümü</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Kasa Tipi</label>
+                        <select name="bodyType" class="form-select" asp-items="ViewBag.BodyTypes">
+                            <option value="">Tümü</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-check mt-4">
+                            <input class="form-check-input" type="checkbox" id="showOnlyDiscounted" name="showOnlyDiscounted" value="true" @(ViewBag.CurrentShowDiscounted == true ? "checked" : "") />
+                            <label class="form-check-label" for="showOnlyDiscounted">
+                                Sadece İndirimli Araçlar
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Min. Yıl</label>
+                        <input type="number" name="minYear" class="form-control" value="@ViewBag.CurrentMinYear" min="1950" max="2100" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Max. Yıl</label>
+                        <input type="number" name="maxYear" class="form-control" value="@ViewBag.CurrentMaxYear" min="1950" max="2100" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Min. Fiyat (₺)</label>
+                        <input type="number" name="minPrice" class="form-control" value="@ViewBag.CurrentMinPrice" min="0" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Max. Fiyat (₺)</label>
+                        <input type="number" name="maxPrice" class="form-control" value="@ViewBag.CurrentMaxPrice" min="0" />
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Filtrele</button>
+                        <a asp-action="Index" class="btn btn-secondary">Sıfırla</a>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <a asp-action="MyFavorites" class="btn btn-warning float-end">
+                                <i class="bi bi-star-fill"></i> Favorilerim
+                            </a>
+                        }
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <div class="float-end me-2">
+                                <a asp-action="Create" class="btn btn-success">Yeni Araç Ekle</a>
+                                <a asp-action="UpdateAllImages" class="btn btn-outline-warning">
+                                    <i class="bi bi-images"></i> Tüm Resimleri Güncelle
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        Kriterlere uygun araç bulunamadı.
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col">
+            <div class="float-end mb-2">
+                <span class="me-2">Sırala:</span>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.BrandSortParam" class="btn btn-sm btn-outline-secondary">Marka</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.PriceSortParam" class="btn btn-sm btn-outline-secondary">Fiyat</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.YearSortParam" class="btn btn-sm btn-outline-secondary">Yıl</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var car in Model)
+        {
+            <div class="col">
+                <div class="card h-100">
+                    @if (!string.IsNullOrEmpty(car.ImageUrl))
+                    {
+                        <div style="height: 200px; overflow: hidden;">
+                            <img src="@car.ImageUrl" class="card-img-top" alt="@car.Brand @car.Model" style="object-fit: cover; height: 100%; width: 100%;">
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="bg-light text-center p-5">
+                            <i class="bi bi-car-front display-1 text-muted"></i>
+                        </div>
+                    }
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h5 class="card-title">@car.Brand @car.Model</h5>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <form asp-action="ToggleFavorite" asp-route-id="@car.Id" method="post">
+                                    <button type="submit" class="btn btn-sm @(ViewBag.FavoriteCarIds != null && ViewBag.FavoriteCarIds.Contains(car.Id) ? "btn-warning" : "btn-outline-warning")">
+                                        <i class="bi bi-star-fill"></i>
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                        <h6 class="card-subtitle mb-2 text-muted">@car.Year - @car.Color</h6>
+                        
+                        <div class="mb-2">
+                            <span class="badge bg-primary">@car.FuelType</span>
+                            <span class="badge bg-secondary">@car.Transmission</span>
+                            <span class="badge bg-info text-dark">@car.BodyType</span>
+                        </div>
+                        
+                        <p class="card-text">
+                            <small>
+                                <i class="bi bi-speedometer2"></i> @car.Mileage km &middot;
+                                <i class="bi bi-fuel-pump"></i> @car.EngineSize &middot;
+                                <i class="bi bi-door-closed"></i> @car.Doors kapı
+                            </small>
+                        </p>
+                        
+                        @if (!string.IsNullOrEmpty(car.Description) && car.Description.Length > 100)
+                        {
+                            <p class="card-text">@car.Description.Substring(0, 100)...</p>
+                        }
+                        else
+                        {
+                            <p class="card-text">@car.Description</p>
+                        }
+                    </div>
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                @if (car.DiscountPercentage.HasValue && car.DiscountPercentage.Value > 0)
+                                {
+                                    <div>
+                                        <span class="text-decoration-line-through text-muted">@car.Price.ToString("N0") ₺</span>
+                                        <span class="text-danger fw-bold">@car.DiscountedPrice?.ToString("N0") ₺</span>
+                                        <span class="badge bg-warning text-dark">%@car.DiscountPercentage İndirim</span>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="text-danger fw-bold">@car.Price.ToString("N0") ₺</span>
+                                }
+                            </div>
+                            <div>
+                                <a asp-action="Details" asp-route-id="@car.Id" class="btn btn-primary btn-sm">Detaylar</a>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a asp-action="Edit" asp-route-id="@car.Id" class="btn btn-warning btn-sm">Düzenle</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

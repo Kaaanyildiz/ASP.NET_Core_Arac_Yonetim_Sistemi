@@ -1,0 +1,31 @@
+@{
+    ViewData["Title"] = "Tüm Araç Resimlerini Güncelle";
+}
+
+<div class="card">
+    <div class="card-header bg-warning text-dark">
+        <h1>Tüm Araç Resimlerini Güncelle</h1>
+    </div>
+    <div class="card-body">
+        <p class="alert alert-info">
+            Bu işlem, tüm araçların resimlerini marka ve modellerine göre otomatik olarak güncelleyecektir. 
+            Bu işlem, şu anda araçlarda bulunan mevcut resim URL'lerini değiştirecektir.
+        </p>
+        
+        <p>
+            Resimler, bilinen araba markaları ve modelleri için özel bir API kullanılarak güncellenecektir. 
+            Her bir araç için marka ve model adına göre uygun bir resim bulunacak ve atanacaktır.
+        </p>
+        
+        <div class="mt-4">
+            <form asp-action="UpdateAllImagesConfirmed" method="post">
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-warning">
+                        <i class="bi bi-images"></i> Tüm Resimleri Güncelle
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">İptal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

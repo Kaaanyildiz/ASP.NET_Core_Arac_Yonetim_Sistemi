@@ -1,0 +1,240 @@
+@model identityApp.Models.Car
+
+@{
+    ViewData["Title"] = $"{Model.Brand} {Model.Model}";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h2>@Model.Brand @Model.Model (@Model.Year)</h2>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <form asp-action="ToggleFavorite" asp-route-id="@Model.Id" method="post">
+                        <button type="submit" class="btn @(ViewBag.IsFavorite == true ? "btn-warning" : "btn-outline-warning")" 
+                                title="@(ViewBag.IsFavorite == true ? "Favorilerden Çıkar" : "Favorilere Ekle")">
+                            <i class="bi bi-star-fill"></i>
+                        </button>
+                    </form>
+                }
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12 mb-4">
+                        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                        {
+                            <img src="@Model.ImageUrl" class="img-fluid rounded w-100" style="max-height: 400px; object-fit: cover;" alt="@Model.Brand @Model.Model">
+                        }
+                        else
+                        {
+                            <div class="bg-light text-center p-5 rounded">
+                                <i class="bi bi-car-front display-1 text-muted"></i>
+                                <p class="text-muted">Resim bulunamadı</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-info text-white">
+                                <h5>Araç Bilgileri</h5>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <th>Kategori:</th>
+                                            <td>@(Model.CarType?.Name ?? "Belirtilmemiş")</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Marka:</th>
+                                            <td>@Model.Brand</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Model:</th>
+                                            <td>@Model.Model</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Yıl:</th>
+                                            <td>@Model.Year</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Renk:</th>
+                                            <td>@Model.Color</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Kilometre:</th>
+                                            <td>@Model.Mileage km</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Kasa Tipi:</th>
+                                            <td>@Model.BodyType</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Kapı Sayısı:</th>
+                                            <td>@Model.Doors</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-info text-white">
+                                <h5>Motor ve Performans</h5>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <th>Motor Hacmi:</th>
+                                            <td>@Model.EngineSize</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Yakıt Tipi:</th>
+                                            <td>@Model.FuelType</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Şanzıman:</th>
+                                            <td>@Model.Transmission</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Yakıt Tüketimi:</th>
+                                            <td>@(Model.FuelType == "Elektrik" ? "Elektrikli" : $"{Model.FuelEfficiency} lt/100km")</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card mb-4">
+                            <div class="card-header bg-success text-white">
+                                <h5>Özellikler</h5>
+                            </div>
+                            <div class="card-body">
+                                @if (!string.IsNullOrEmpty(Model.Features))
+                                {
+                                    <p>@Model.Features</p>
+                                }
+                                else
+                                {
+                                    <p class="text-muted">Belirtilmemiş</p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card mb-4">
+                            <div class="card-header bg-dark text-white">
+                                <h5>Açıklama</h5>
+                            </div>
+                            <div class="card-body">
+                                @if (!string.IsNullOrEmpty(Model.Description))
+                                {
+                                    <p>@Model.Description</p>
+                                }
+                                else
+                                {
+                                    <p class="text-muted">Açıklama yok</p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header bg-danger text-white">
+                <h4>Fiyat Bilgisi</h4>
+            </div>
+            <div class="card-body">
+                @if (Model.DiscountPercentage.HasValue && Model.DiscountPercentage.Value > 0)
+                {
+                    <div class="text-center">
+                        <h3 class="text-danger">
+                            <span class="text-decoration-line-through text-muted">@Model.Price.ToString("N0") ₺</span>
+                        </h3>
+                        <h2 class="text-success">@Model.DiscountedPrice?.ToString("N0") ₺</h2>
+                        <div class="badge bg-warning text-dark">%@Model.DiscountPercentage İndirim</div>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center">
+                        <h2 class="text-danger">@Model.Price.ToString("N0") ₺</h2>
+                    </div>
+                }
+                
+                <hr />
+                
+                <div class="d-grid gap-2">
+                    <a href="tel:+905001234567" class="btn btn-success btn-lg">
+                        <i class="bi bi-telephone-fill"></i> Hemen Ara
+                    </a>
+                    <button class="btn btn-outline-primary">
+                        <i class="bi bi-chat-dots-fill"></i> Mesaj Gönder
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header bg-secondary text-white">
+                <h5>Araç Durumu</h5>
+            </div>
+            <div class="card-body text-center">
+                @if (Model.IsAvailable)
+                {
+                    <div class="alert alert-success">
+                        <i class="bi bi-check-circle-fill"></i> Satışta
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-danger">
+                        <i class="bi bi-x-circle-fill"></i> Satışta Değil
+                    </div>
+                }
+                <p class="mb-1"><small>Eklenme Tarihi: @Model.DateAdded.ToString("dd.MM.yyyy")</small></p>
+            </div>
+        </div>
+        
+        @if (User.IsInRole("Admin"))
+        {
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5>Yönetim</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Düzenle</a>
+                        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Sil</a>
+                        <form asp-action="ToggleAvailability" asp-route-id="@Model.Id" method="post">
+                            <button type="submit" class="btn btn-outline-primary w-100">
+                                @(Model.IsAvailable ? "Satıştan Kaldır" : "Satışa Koy")
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Araçlara Dön</a>
+</div>

@@ -1,0 +1,97 @@
+﻿@model IEnumerable<identityApp.Models.Car>
+
+@{
+    ViewData["Title"] = "Araba Galerisi";
+}
+
+<div class="text-center my-4">
+    <h1 class="display-4">Araba Galerisi</h1>
+    <p>Kaliteli ve güvenilir araç seçenekleriyle hizmetinizdeyiz.</p>
+</div>
+
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="card">
+            <div class="card-body bg-light">
+                <h5 class="card-title">Araba mı arıyorsunuz?</h5>
+                <p class="card-text">Siz de hayalinizdeki arabaya kavuşmak istiyorsanız doğru yerdesiniz! Geniş araç seçeneklerimiz ve uygun fiyatlarımızla sizleri showroom'umuza bekliyoruz.</p>
+                <a asp-controller="Cars" asp-action="Index" class="btn btn-primary">Tüm Araçları Gör</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">Öne Çıkan Araçlarımız</h2>
+    </div>
+</div>
+
+<div class="row">
+    @if (Model != null && Model.Any())
+    {
+        foreach (var car in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    @if (!string.IsNullOrEmpty(car.ImageUrl))
+                    {
+                        <img src="@car.ImageUrl" class="card-img-top" alt="@car.Brand @car.Model" style="height: 200px; object-fit: cover;">
+                    }
+                    else
+                    {
+                        <img src="/images/default-car.jpg" class="card-img-top" alt="@car.Brand @car.Model" style="height: 200px; object-fit: cover;">
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@car.Brand @car.Model (@car.Year)</h5>
+                        <p class="card-text">
+                            <strong>Fiyat:</strong> @car.Price.ToString("C0")<br />
+                            <strong>Kilometre:</strong> @car.Mileage.ToString("N0") km<br />
+                            <strong>Motor:</strong> @car.EngineSize<br />
+                            <strong>Renk:</strong> @car.Color
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <a asp-controller="Cars" asp-action="Details" asp-route-id="@car.Id" class="btn btn-sm btn-primary">Detayları Gör</a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="col-12 text-center">
+            <p>Henüz araç bulunmamaktadır.</p>
+        </div>
+    }
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Neden Biz?</h5>
+                <ul class="list-unstyled">
+                    <li>✓ Kaliteli Araçlar</li>
+                    <li>✓ Uygun Fiyatlar</li>
+                    <li>✓ Güvenilir Hizmet</li>
+                    <li>✓ Uzman Kadro</li>
+                    <li>✓ 7/24 Destek</li>
+                </ul>
+                <a asp-controller="Home" asp-action="About" class="btn btn-outline-primary">Hakkımızda</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">İletişime Geçin</h5>
+                <p>Sorularınız mı var? Bizimle iletişime geçin.</p>
+                <p><strong>Telefon:</strong> +90 555 123 45 67</p>
+                <p><strong>Email:</strong> info@arabagaraji.com</p>
+                <p><strong>Adres:</strong> Merkez Mah., Otomobil Cad., No: 34, Kayseri</p>
+                <a asp-controller="Home" asp-action="Contact" class="btn btn-outline-primary">İletişim</a>
+            </div>
+        </div>
+    </div>
+</div>
