@@ -1,6 +1,5 @@
 # 🚗 Araç Yönetim Sistemi
 
-![Banner](https://via.placeholder.com/800x200/0073CF/FFFFFF?text=Ara%C3%A7+Y%C3%B6netim+Sistemi)
 
 Bu proje, ASP.NET Core kullanılarak geliştirilmiş bir kimlik yönetimi ve araç takip sistemidir. Kullanıcı yönetimi, araç CRUD işlemleri ve yetkilendirme özellikleri içerir.
 
@@ -113,18 +112,6 @@ IdentityApp/
 ├── Migrations/      # Veritabanı şema değişiklikleri
 └── wwwroot/         # Statik dosyalar (CSS, JavaScript, resimler)
 ```
-
-## 📸 Ekran Görüntüleri
-
-<p align="center">
-  <img src="https://via.placeholder.com/400x250/0073CF/FFFFFF?text=Ana+Sayfa" alt="Ana Sayfa" width="400" />
-  <img src="https://via.placeholder.com/400x250/0073CF/FFFFFF?text=Ara%C3%A7+Detay" alt="Araç Detay" width="400" />
-</p>
-
-<p align="center">
-  <img src="https://via.placeholder.com/400x250/0073CF/FFFFFF?text=Y%C3%B6netici+Paneli" alt="Yönetici Paneli" width="400" />
-  <img src="https://via.placeholder.com/400x250/0073CF/FFFFFF?text=Kullan%C4%B1c%C4%B1+Profili" alt="Kullanıcı Profili" width="400" />
-</p>
 
 ## 🤝 Katkıda Bulunma
 
