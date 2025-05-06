@@ -4,211 +4,602 @@
     ViewData["Title"] = "Araçlar";
 }
 
-<h1>Araçlar</h1>
+<div class="page-banner" data-aos="fade-down">
+    <div class="banner-content">
+        <h1>Araç Koleksiyonumuz</h1>
+        <p>Kaan Oto Galerisi'nin özenle seçilmiş araçları</p>
+    </div>
+</div>
 
 @if (TempData["Message"] != null)
 {
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <div class="alert alert-success alert-dismissible fade show" role="alert" data-aos="fade-up">
         @TempData["Message"]
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
 
-<div class="row mb-4">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h4>Filtrele</h4>
-            </div>
-            <div class="card-body">
-                <form method="get" class="row g-3">
-                    <div class="col-md-3">
-                        <label class="form-label">Marka</label>
-                        <select name="brand" class="form-select" asp-items="ViewBag.Brands">
-                            <option value="">Tümü</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Model</label>
-                        <input type="text" name="model" class="form-control" value="@ViewBag.CurrentModel" />
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Renk</label>
-                        <input type="text" name="color" class="form-control" value="@ViewBag.CurrentColor" />
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Kategori</label>
-                        <select name="carTypeId" class="form-select" asp-items="ViewBag.CarTypes">
-                            <option value="">Tümü</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Yakıt Tipi</label>
-                        <select name="fuelType" class="form-select" asp-items="ViewBag.FuelTypes">
-                            <option value="">Tümü</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Şanzıman</label>
-                        <select name="transmission" class="form-select" asp-items="ViewBag.Transmissions">
-                            <option value="">Tümü</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Kasa Tipi</label>
-                        <select name="bodyType" class="form-select" asp-items="ViewBag.BodyTypes">
-                            <option value="">Tümü</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-check mt-4">
-                            <input class="form-check-input" type="checkbox" id="showOnlyDiscounted" name="showOnlyDiscounted" value="true" @(ViewBag.CurrentShowDiscounted == true ? "checked" : "") />
-                            <label class="form-check-label" for="showOnlyDiscounted">
-                                Sadece İndirimli Araçlar
-                            </label>
+<div class="container mt-5">
+    <div class="row mb-4" data-aos="fade-up">
+        <div class="col-md-12">
+            <div class="card border-0 shadow">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0"><i class="bi bi-funnel me-2"></i>Araç Filtreleme</h4>
+                    <button class="btn btn-sm btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="false" aria-controls="filterCollapse">
+                        <i class="bi bi-chevron-down"></i>
+                    </button>
+                </div>
+                <div class="card-body collapse show" id="filterCollapse">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-3">
+                            <div class="form-floating">
+                                <select name="brand" class="form-select" id="brandSelect" asp-items="ViewBag.Brands">
+                                    <option value="">Tümü</option>
+                                </select>
+                                <label for="brandSelect">Marka</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Min. Yıl</label>
-                        <input type="number" name="minYear" class="form-control" value="@ViewBag.CurrentMinYear" min="1950" max="2100" />
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Max. Yıl</label>
-                        <input type="number" name="maxYear" class="form-control" value="@ViewBag.CurrentMaxYear" min="1950" max="2100" />
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Min. Fiyat (₺)</label>
-                        <input type="number" name="minPrice" class="form-control" value="@ViewBag.CurrentMinPrice" min="0" />
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Max. Fiyat (₺)</label>
-                        <input type="number" name="maxPrice" class="form-control" value="@ViewBag.CurrentMaxPrice" min="0" />
-                    </div>
-                    <div class="col-12">
-                        <button type="submit" class="btn btn-primary">Filtrele</button>
-                        <a asp-action="Index" class="btn btn-secondary">Sıfırla</a>
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <a asp-action="MyFavorites" class="btn btn-warning float-end">
-                                <i class="bi bi-star-fill"></i> Favorilerim
-                            </a>
-                        }
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <div class="float-end me-2">
-                                <a asp-action="Create" class="btn btn-success">Yeni Araç Ekle</a>
-                                <a asp-action="UpdateAllImages" class="btn btn-outline-warning">
-                                    <i class="bi bi-images"></i> Tüm Resimleri Güncelle
+                        <div class="col-md-3">
+                            <div class="form-floating">
+                                <input type="text" name="model" class="form-control" id="modelInput" value="@ViewBag.CurrentModel" />
+                                <label for="modelInput">Model</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-floating">
+                                <input type="text" name="color" class="form-control" id="colorInput" value="@ViewBag.CurrentColor" />
+                                <label for="colorInput">Renk</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-floating">
+                                <select name="carTypeId" class="form-select" id="carTypeSelect" asp-items="ViewBag.CarTypes">
+                                    <option value="">Tümü</option>
+                                </select>
+                                <label for="carTypeSelect">Kategori</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-floating">
+                                <select name="fuelType" class="form-select" id="fuelTypeSelect" asp-items="ViewBag.FuelTypes">
+                                    <option value="">Tümü</option>
+                                </select>
+                                <label for="fuelTypeSelect">Yakıt Tipi</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-floating">
+                                <select name="transmission" class="form-select" id="transmissionSelect" asp-items="ViewBag.Transmissions">
+                                    <option value="">Tümü</option>
+                                </select>
+                                <label for="transmissionSelect">Şanzıman</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-floating">
+                                <select name="bodyType" class="form-select" id="bodyTypeSelect" asp-items="ViewBag.BodyTypes">
+                                    <option value="">Tümü</option>
+                                </select>
+                                <label for="bodyTypeSelect">Kasa Tipi</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-check form-switch mt-4 ms-2">
+                                <input class="form-check-input" type="checkbox" id="showOnlyDiscounted" name="showOnlyDiscounted" value="true" @(ViewBag.CurrentShowDiscounted == true ? "checked" : "") />
+                                <label class="form-check-label" for="showOnlyDiscounted">
+                                    <i class="bi bi-tag-fill text-warning me-1"></i> Sadece İndirimli Araçlar
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-12">
+                            <hr class="my-2">
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <div class="form-floating">
+                                <input type="number" name="minYear" class="form-control" id="minYearInput" value="@ViewBag.CurrentMinYear" min="1950" max="2100" />
+                                <label for="minYearInput">Min. Yıl</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-floating">
+                                <input type="number" name="maxYear" class="form-control" id="maxYearInput" value="@ViewBag.CurrentMaxYear" min="1950" max="2100" />
+                                <label for="maxYearInput">Max. Yıl</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-floating">
+                                <input type="number" name="minPrice" class="form-control" id="minPriceInput" value="@ViewBag.CurrentMinPrice" min="0" />
+                                <label for="minPriceInput">Min. Fiyat (₺)</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-floating">
+                                <input type="number" name="maxPrice" class="form-control" id="maxPriceInput" value="@ViewBag.CurrentMaxPrice" min="0" />
+                                <label for="maxPriceInput">Max. Fiyat (₺)</label>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12 mt-4">
+                            <div class="d-flex flex-wrap gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="bi bi-search me-2"></i> Araçları Filtrele
+                                </button>
+                                <a asp-action="Index" class="btn btn-outline-secondary btn-lg">
+                                    <i class="bi bi-arrow-repeat me-2"></i> Filtreleri Sıfırla
                                 </a>
+                                
+                                <div class="ms-auto">
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <a asp-action="MyFavorites" class="btn btn-warning btn-lg">
+                                            <i class="bi bi-star-fill me-2"></i> Favorilerim
+                                        </a>
+                                    }
+                                    
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <a asp-action="Create" class="btn btn-success btn-lg ms-2">
+                                            <i class="bi bi-plus-circle me-2"></i> Yeni Araç Ekle
+                                        </a>
+                                        <a asp-action="UpdateAllImages" class="btn btn-outline-warning btn-lg ms-2">
+                                            <i class="bi bi-images me-2"></i> Tüm Resimleri Güncelle
+                                        </a>
+                                    }
+                                </div>
                             </div>
-                        }
-                    </div>
-                </form>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-@if (!Model.Any())
-{
-    <div class="alert alert-info">
-        Kriterlere uygun araç bulunamadı.
-    </div>
-}
-else
-{
-    <div class="row">
-        <div class="col">
-            <div class="float-end mb-2">
-                <span class="me-2">Sırala:</span>
-                <a asp-action="Index" asp-route-sortOrder="@ViewBag.BrandSortParam" class="btn btn-sm btn-outline-secondary">Marka</a>
-                <a asp-action="Index" asp-route-sortOrder="@ViewBag.PriceSortParam" class="btn btn-sm btn-outline-secondary">Fiyat</a>
-                <a asp-action="Index" asp-route-sortOrder="@ViewBag.YearSortParam" class="btn btn-sm btn-outline-secondary">Yıl</a>
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info shadow-sm" data-aos="fade-up">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-info-circle display-6 me-3"></i>
+                <div>
+                    <h4 class="alert-heading">Araç Bulunamadı</h4>
+                    <p class="mb-0">Arama kriterlerinize uygun araç bulunamadı. Lütfen filtreleri değiştirerek tekrar deneyiniz.</p>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        @foreach (var car in Model)
-        {
+    }
+    else
+    {
+        <div class="row mb-4" data-aos="fade-up">
             <div class="col">
-                <div class="card h-100">
-                    @if (!string.IsNullOrEmpty(car.ImageUrl))
-                    {
-                        <div style="height: 200px; overflow: hidden;">
-                            <img src="@car.ImageUrl" class="card-img-top" alt="@car.Brand @car.Model" style="object-fit: cover; height: 100%; width: 100%;">
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="bg-light text-center p-5">
-                            <i class="bi bi-car-front display-1 text-muted"></i>
-                        </div>
-                    }
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <h5 class="card-title">@car.Brand @car.Model</h5>
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                <form asp-action="ToggleFavorite" asp-route-id="@car.Id" method="post">
-                                    <button type="submit" class="btn btn-sm @(ViewBag.FavoriteCarIds != null && ViewBag.FavoriteCarIds.Contains(car.Id) ? "btn-warning" : "btn-outline-warning")">
-                                        <i class="bi bi-star-fill"></i>
-                                    </button>
-                                </form>
-                            }
-                        </div>
-                        <h6 class="card-subtitle mb-2 text-muted">@car.Year - @car.Color</h6>
-                        
-                        <div class="mb-2">
-                            <span class="badge bg-primary">@car.FuelType</span>
-                            <span class="badge bg-secondary">@car.Transmission</span>
-                            <span class="badge bg-info text-dark">@car.BodyType</span>
-                        </div>
-                        
-                        <p class="card-text">
-                            <small>
-                                <i class="bi bi-speedometer2"></i> @car.Mileage km &middot;
-                                <i class="bi bi-fuel-pump"></i> @car.EngineSize &middot;
-                                <i class="bi bi-door-closed"></i> @car.Doors kapı
-                            </small>
-                        </p>
-                        
-                        @if (!string.IsNullOrEmpty(car.Description) && car.Description.Length > 100)
-                        {
-                            <p class="card-text">@car.Description.Substring(0, 100)...</p>
-                        }
-                        else
-                        {
-                            <p class="card-text">@car.Description</p>
-                        }
-                    </div>
-                    <div class="card-footer">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                @if (car.DiscountPercentage.HasValue && car.DiscountPercentage.Value > 0)
-                                {
-                                    <div>
-                                        <span class="text-decoration-line-through text-muted">@car.Price.ToString("N0") ₺</span>
-                                        <span class="text-danger fw-bold">@car.DiscountedPrice?.ToString("N0") ₺</span>
-                                        <span class="badge bg-warning text-dark">%@car.DiscountPercentage İndirim</span>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <span class="text-danger fw-bold">@car.Price.ToString("N0") ₺</span>
-                                }
-                            </div>
-                            <div>
-                                <a asp-action="Details" asp-route-id="@car.Id" class="btn btn-primary btn-sm">Detaylar</a>
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <a asp-action="Edit" asp-route-id="@car.Id" class="btn btn-warning btn-sm">Düzenle</a>
-                                }
-                            </div>
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body py-3 d-flex justify-content-between align-items-center flex-wrap">
+                        <h4 class="mb-0 d-flex align-items-center">
+                            <span class="badge bg-primary rounded-pill me-2" style="font-size: 1rem;">@Model.Count()</span>
+                            Araç Bulundu
+                        </h4>
+                        <div class="sorting-options d-flex flex-wrap gap-2 mt-2 mt-md-0">
+                            <span class="me-2 d-flex align-items-center"><i class="bi bi-sort-alpha-down me-1"></i> Sırala:</span>
+                            <a asp-action="Index" asp-route-sortOrder="@ViewBag.BrandSortParam" class="btn btn-sm @(ViewBag.CurrentSort == "brand" || ViewBag.CurrentSort == "brand_desc" ? "btn-primary" : "btn-outline-primary")">
+                                Marka 
+                                @if (ViewBag.CurrentSort == "brand") { <i class="bi bi-arrow-up"></i> }
+                                @if (ViewBag.CurrentSort == "brand_desc") { <i class="bi bi-arrow-down"></i> }
+                            </a>
+                            <a asp-action="Index" asp-route-sortOrder="@ViewBag.PriceSortParam" class="btn btn-sm @(ViewBag.CurrentSort == "price" || ViewBag.CurrentSort == "price_desc" ? "btn-primary" : "btn-outline-primary")">
+                                Fiyat
+                                @if (ViewBag.CurrentSort == "price") { <i class="bi bi-arrow-up"></i> }
+                                @if (ViewBag.CurrentSort == "price_desc") { <i class="bi bi-arrow-down"></i> }
+                            </a>
+                            <a asp-action="Index" asp-route-sortOrder="@ViewBag.YearSortParam" class="btn btn-sm @(ViewBag.CurrentSort == "year" || ViewBag.CurrentSort == "year_desc" ? "btn-primary" : "btn-outline-primary")">
+                                Yıl
+                                @if (ViewBag.CurrentSort == "year") { <i class="bi bi-arrow-up"></i> }
+                                @if (ViewBag.CurrentSort == "year_desc") { <i class="bi bi-arrow-down"></i> }
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+        
+        <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+            @foreach (var car in Model)
+            {
+                <div class="col" data-aos="fade-up" data-aos-duration="800">
+                    <div class="card h-100 car-card border-0 shadow-sm">
+                        @if (car.DiscountPercentage.HasValue && car.DiscountPercentage.Value > 0)
+                        {
+                            <div class="discount-badge">
+                                <i class="bi bi-tag-fill me-1"></i>%@car.DiscountPercentage İndirim
+                            </div>
+                        }
+                        
+                        <div class="card-img-wrapper">
+                            @if (!string.IsNullOrEmpty(car.ImageUrl))
+                            {
+                                <img src="@car.ImageUrl" class="card-img-top" alt="@car.Brand @car.Model">
+                            }
+                            else
+                            {
+                                <div class="no-image-placeholder">
+                                    <i class="bi bi-car-front"></i>
+                                    <p class="mt-2">Resim Yok</p>
+                                </div>
+                            }
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <form asp-action="ToggleFavorite" asp-route-id="@car.Id" method="post" class="favorite-form">
+                                    <button type="submit" class="btn favorite-btn @(ViewBag.FavoriteCarIds != null && ViewBag.FavoriteCarIds.Contains(car.Id) ? "favorited" : "")">
+                                        <i class="bi bi-star-fill"></i>
+                                    </button>
+                                </form>
+                            }
+                            <div class="car-info-overlay">
+                                <div class="year-badge">@car.Year</div>
+                            </div>
+                        </div>
+                        
+                        <div class="card-body">
+                            <h5 class="card-title">@car.Brand @car.Model</h5>
+                            <div class="d-flex justify-content-between mb-2">
+                                <h6 class="card-subtitle text-muted">@car.Color</h6>
+                                <div class="car-badges">
+                                    <span class="badge rounded-pill bg-primary">@car.FuelType</span>
+                                    <span class="badge rounded-pill bg-secondary">@car.Transmission</span>
+                                </div>
+                            </div>
+                            
+                            <div class="car-specs-grid mb-3">
+                                <div class="spec-item">
+                                    <i class="bi bi-speedometer2"></i>
+                                    <span>@car.Mileage km</span>
+                                </div>
+                                <div class="spec-item">
+                                    <i class="bi bi-fuel-pump"></i>
+                                    <span>@car.EngineSize</span>
+                                </div>
+                                <div class="spec-item">
+                                    <i class="bi bi-door-closed"></i>
+                                    <span>@car.Doors kapı</span>
+                                </div>
+                                <div class="spec-item">
+                                    <i class="bi bi-car-front"></i>
+                                    <span>@car.BodyType</span>
+                                </div>
+                            </div>
+                            
+                            @if (!string.IsNullOrEmpty(car.Description))
+                            {
+                                <div class="description-container">
+                                    @if (car.Description.Length > 100)
+                                    {
+                                        <p class="card-text description">@car.Description.Substring(0, 100)...</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="card-text description">@car.Description</p>
+                                    }
+                                </div>
+                            }
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="price-container">
+                                    @if (car.DiscountPercentage.HasValue && car.DiscountPercentage.Value > 0)
+                                    {
+                                        <div>
+                                            <div class="original-price">@car.Price.ToString("N0") ₺</div>
+                                            <div class="discounted-price">@car.DiscountedPrice?.ToString("N0") ₺</div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="final-price">@car.Price.ToString("N0") ₺</div>
+                                    }
+                                </div>
+                                <div class="btn-group">
+                                    <a asp-action="Details" asp-route-id="@car.Id" class="btn btn-primary">
+                                        <i class="bi bi-info-circle me-1"></i> Detaylar
+                                    </a>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@car.Id" class="btn btn-warning">
+                                            <i class="bi bi-pencil me-1"></i> Düzenle
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        // Filtre bölümü için açılır/kapanır davranış
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterToggleBtn = document.querySelector('[data-bs-target="#filterCollapse"]');
+            const filterIcon = filterToggleBtn.querySelector('i');
+            
+            // Bootstrap collapse event handler
+            document.getElementById('filterCollapse').addEventListener('hidden.bs.collapse', function () {
+                filterIcon.classList.remove('bi-chevron-up');
+                filterIcon.classList.add('bi-chevron-down');
+            });
+            
+            document.getElementById('filterCollapse').addEventListener('shown.bs.collapse', function () {
+                filterIcon.classList.remove('bi-chevron-down');
+                filterIcon.classList.add('bi-chevron-up');
+            });
+        });
+    </script>
+    
+    <style>
+        /* Araç Kartları Stilleri */
+        .car-card {
+            transition: all 0.4s ease;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
         }
-    </div>
+        
+        .car-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15) !important;
+        }
+        
+        .card-img-wrapper {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        
+        .card-img-top {
+            object-fit: cover;
+            height: 100%;
+            width: 100%;
+            transition: transform 0.7s ease;
+        }
+        
+        .car-card:hover .card-img-top {
+            transform: scale(1.1);
+        }
+        
+        .no-image-placeholder {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+            color: #6c757d;
+        }
+        
+        .no-image-placeholder i {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .no-image-placeholder p {
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        
+        .discount-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            z-index: 1;
+            box-shadow: 0 3px 8px rgba(255, 87, 34, 0.3);
+            display: flex;
+            align-items: center;
+        }
+        
+        .year-badge {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        
+        .car-info-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 10px;
+            background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+            transition: opacity 0.3s;
+        }
+        
+        .favorite-form {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            z-index: 1;
+        }
+        
+        .favorite-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            color: #6c757d;
+            border: none;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+            transition: all 0.3s;
+        }
+        
+        .favorite-btn i {
+            font-size: 1.25rem;
+        }
+        
+        .favorite-btn:hover {
+            background-color: #f8f9fa;
+            transform: scale(1.15);
+        }
+        
+        .favorite-btn.favorited {
+            background: linear-gradient(135deg, #ffc107, #ff9800);
+            color: white;
+            animation: pulse 1s;
+        }
+        
+        @* Razor tarafından yanlış yorumlanmaması için @ işaretini escape ediyoruz *@
+        @@keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        .car-card .card-title {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            color: #343a40;
+        }
+        
+        .car-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        
+        .car-specs-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .spec-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #495057;
+        }
+        
+        .spec-item i {
+            margin-right: 8px;
+            color: #6c757d;
+            font-size: 1rem;
+        }
+        
+        .description-container {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        .description {
+            font-size: 0.875rem;
+            color: #6c757d;
+            margin-bottom: 0;
+            line-height: 1.5;
+        }
+        
+        .price-container {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .original-price {
+            font-size: 0.875rem;
+            text-decoration: line-through;
+            color: #6c757d;
+        }
+        
+        .discounted-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #dc3545;
+        }
+        
+        .final-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #343a40;
+        }
+        
+        /* Form stilleri */
+        .form-floating > .form-select,
+        .form-floating > .form-control {
+            height: calc(3.5rem + 2px);
+            line-height: 1.25;
+        }
+        
+        .form-floating > label {
+            padding: 1rem 0.75rem;
+        }
+        
+        .form-check.form-switch .form-check-input {
+            height: 1.5rem;
+            width: 3rem;
+            margin-top: -0.25rem;
+        }
+        
+        .form-check.form-switch .form-check-label {
+            padding-top: 0.25rem;
+            font-weight: 500;
+        }
+        
+        /* Butonlar için iyileştirmeler */
+        .btn {
+            border-radius: 5px;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s;
+        }
+        
+        .btn-lg {
+            padding: 0.75rem 1.5rem;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            border: none;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #ffc107, #ff9800);
+            border: none;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #28a745, #198754);
+            border: none;
+        }
+        
+        .badge {
+            padding: 0.35em 0.65em;
+            font-weight: 600;
+        }
+    </style>
 }

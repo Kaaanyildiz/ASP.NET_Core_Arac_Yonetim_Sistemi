@@ -17,11 +17,11 @@ builder.Services.AddIdentity<AppUser, IdentityRole>()
     .AddEntityFrameworkStores<IdentityContext>();
 
 builder.Services.Configure<IdentityOptions>(options => {
-    // Default Password settings.
+    // Password settings - Geliştirme ortamı için basit şifre gereksinimleri
     options.Password.RequireDigit = true;
-    options.Password.RequireLowercase = true;
-    options.Password.RequireNonAlphanumeric = true;
-    options.Password.RequireUppercase = true;
+    options.Password.RequireLowercase = false;  // Küçük harf gerektirme
+    options.Password.RequireNonAlphanumeric = false; // Özel karakter gerektirme
+    options.Password.RequireUppercase = false;  // Büyük harf gerektirme
     options.Password.RequiredLength = 6;
     options.Password.RequiredUniqueChars = 1;
 

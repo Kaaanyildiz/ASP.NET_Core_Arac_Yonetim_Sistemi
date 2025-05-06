@@ -1,97 +1,314 @@
 ﻿@model IEnumerable<identityApp.Models.Car>
 
 @{
-    ViewData["Title"] = "Araba Galerisi";
+    ViewData["Title"] = "Kaan Oto Galerisi";
 }
 
-<div class="text-center my-4">
-    <h1 class="display-4">Araba Galerisi</h1>
-    <p>Kaliteli ve güvenilir araç seçenekleriyle hizmetinizdeyiz.</p>
-</div>
+<!-- Hero Banner Section -->
+<section class="page-banner" data-aos="fade-down">
+    <div class="banner-content">
+        <h1>Kaan Oto Galerisi</h1>
+        <p>Sivas'ın en güvenilir araç galerisi</p>
+        <a asp-controller="Cars" asp-action="Index" class="btn btn-primary mt-3">Araçları İncele</a>
+    </div>
+</section>
 
-<div class="row">
-    <div class="col-md-12 mb-4">
-        <div class="card">
-            <div class="card-body bg-light">
-                <h5 class="card-title">Araba mı arıyorsunuz?</h5>
-                <p class="card-text">Siz de hayalinizdeki arabaya kavuşmak istiyorsanız doğru yerdesiniz! Geniş araç seçeneklerimiz ve uygun fiyatlarımızla sizleri showroom'umuza bekliyoruz.</p>
-                <a asp-controller="Cars" asp-action="Index" class="btn btn-primary">Tüm Araçları Gör</a>
-            </div>
+<!-- Featured Cars Slider -->
+<section class="container mb-5" data-aos="fade-up">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="text-center">Öne Çıkan Araçlarımız</h2>
+            <p class="text-center text-muted">En popüler ve göz alıcı araçlarımız</p>
         </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-12">
-        <h2 class="mb-4">Öne Çıkan Araçlarımız</h2>
-    </div>
-</div>
-
-<div class="row">
     @if (Model != null && Model.Any())
     {
-        foreach (var car in Model)
-        {
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    @if (!string.IsNullOrEmpty(car.ImageUrl))
-                    {
-                        <img src="@car.ImageUrl" class="card-img-top" alt="@car.Brand @car.Model" style="height: 200px; object-fit: cover;">
-                    }
-                    else
-                    {
-                        <img src="/images/default-car.jpg" class="card-img-top" alt="@car.Brand @car.Model" style="height: 200px; object-fit: cover;">
-                    }
-                    <div class="card-body">
-                        <h5 class="card-title">@car.Brand @car.Model (@car.Year)</h5>
-                        <p class="card-text">
-                            <strong>Fiyat:</strong> @car.Price.ToString("C0")<br />
-                            <strong>Kilometre:</strong> @car.Mileage.ToString("N0") km<br />
-                            <strong>Motor:</strong> @car.EngineSize<br />
-                            <strong>Renk:</strong> @car.Color
-                        </p>
+        <div class="swiper featured-swiper">
+            <div class="swiper-wrapper">
+                @foreach (var car in Model)
+                {
+                    <div class="swiper-slide">
+                        <div class="card h-100 border-0">
+                            @if (car.DiscountPercentage.HasValue && car.DiscountPercentage > 0)
+                            {
+                                <div class="card-discount">%@car.DiscountPercentage İndirim</div>
+                            }
+                            @if (!string.IsNullOrEmpty(car.ImageUrl))
+                            {
+                                <img src="@car.ImageUrl" class="card-img-top" alt="@car.Brand @car.Model">
+                            }
+                            else
+                            {
+                                <img src="/images/default-car.jpg" class="card-img-top" alt="@car.Brand @car.Model">
+                            }
+                            <div class="card-body">
+                                <h5 class="card-title">@car.Brand @car.Model</h5>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="card-price">
+                                        @if (car.DiscountPercentage.HasValue && car.DiscountPercentage > 0)
+                                        {
+                                            var discountedPrice = car.Price - (car.Price * car.DiscountPercentage.Value / 100);
+                                            <span class="text-muted text-decoration-line-through me-2">@car.Price.ToString("C0")</span>
+                                            @discountedPrice.ToString("C0")
+                                        }
+                                        else
+                                        {
+                                            @car.Price.ToString("C0")
+                                        }
+                                    </span>
+                                    <span class="badge bg-secondary">@car.Year</span>
+                                </div>
+                                <div class="d-flex flex-wrap mb-2">
+                                    <span class="feature-icon me-3"><i class="bi bi-speedometer2"></i> @car.Mileage.ToString("N0") km</span>
+                                    <span class="feature-icon me-3"><i class="bi bi-fuel-pump"></i> @car.FuelType</span>
+                                    <span class="feature-icon"><i class="bi bi-gear"></i> @car.Transmission</span>
+                                </div>
+                                <a asp-controller="Cars" asp-action="Details" asp-route-id="@car.Id" class="btn btn-outline-primary w-100 mt-2">Detayları Gör</a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-footer">
-                        <a asp-controller="Cars" asp-action="Details" asp-route-id="@car.Id" class="btn btn-sm btn-primary">Detayları Gör</a>
-                    </div>
-                </div>
+                }
             </div>
-        }
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
     }
     else
     {
-        <div class="col-12 text-center">
-            <p>Henüz araç bulunmamaktadır.</p>
+        <div class="text-center py-5">
+            <i class="bi bi-car-front display-1 text-muted"></i>
+            <p class="mt-3">Henüz araç bulunmamaktadır.</p>
+            <a asp-controller="Cars" asp-action="Index" class="btn btn-primary mt-2">Tüm Araçları Gör</a>
         </div>
     }
-</div>
+</section>
 
-<div class="row mt-5">
-    <div class="col-md-6 mb-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">Neden Biz?</h5>
-                <ul class="list-unstyled">
-                    <li>✓ Kaliteli Araçlar</li>
-                    <li>✓ Uygun Fiyatlar</li>
-                    <li>✓ Güvenilir Hizmet</li>
-                    <li>✓ Uzman Kadro</li>
-                    <li>✓ 7/24 Destek</li>
-                </ul>
-                <a asp-controller="Home" asp-action="About" class="btn btn-outline-primary">Hakkımızda</a>
+<!-- Services Section -->
+<section class="bg-light py-5 mb-5" data-aos="fade-up">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h2>Hizmetlerimiz</h2>
+                <p class="text-muted">Size sunduğumuz özel hizmetler</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="card h-100 border-0">
+                    <div class="card-body text-center">
+                        <i class="bi bi-car-front display-4 text-primary mb-3"></i>
+                        <h5 class="card-title">Geniş Araç Seçenekleri</h5>
+                        <p class="card-text">Her bütçeye ve ihtiyaca uygun çeşitli araç seçenekleri sunuyoruz.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="card h-100 border-0">
+                    <div class="card-body text-center">
+                        <i class="bi bi-shield-check display-4 text-primary mb-3"></i>
+                        <h5 class="card-title">Güvenilir Hizmet</h5>
+                        <p class="card-text">Tüm araçlarımız detaylı kontrolden geçirilir ve garantili olarak teslim edilir.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="card h-100 border-0">
+                    <div class="card-body text-center">
+                        <i class="bi bi-currency-exchange display-4 text-primary mb-3"></i>
+                        <h5 class="card-title">Uygun Fiyatlar</h5>
+                        <p class="card-text">Piyasadaki en iyi fiyatları sunarak bütçenizi zorlamadan araç sahibi olmanızı sağlıyoruz.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-6 mb-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">İletişime Geçin</h5>
-                <p>Sorularınız mı var? Bizimle iletişime geçin.</p>
-                <p><strong>Telefon:</strong> +90 555 123 45 67</p>
-                <p><strong>Email:</strong> info@arabagaraji.com</p>
-                <p><strong>Adres:</strong> Merkez Mah., Otomobil Cad., No: 34, Kayseri</p>
-                <a asp-controller="Home" asp-action="Contact" class="btn btn-outline-primary">İletişim</a>
+</section>
+
+<!-- Testimonials Section -->
+<section class="container mb-5" data-aos="fade-up">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h2>Müşteri Yorumları</h2>
+            <p class="text-muted">Müşterilerimizin bizimle ilgili düşünceleri</p>
+        </div>
+    </div>
+    <div class="swiper testimonial-swiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                        </div>
+                        <p class="card-text">Mehmet Kaan YILDIZ Bey'in profesyonel yaklaşımı sayesinde hayalim olan arabaya kavuştum. Süreç boyunca her adımda yanımda oldu.</p>
+                        <div class="mt-3">
+                            <h6 class="mb-0">Ali Güneş</h6>
+                            <small class="text-muted">BMW 320i Sahibi</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-half text-warning"></i>
+                        </div>
+                        <p class="card-text">Kaan Oto Galerisi'nin satış sonrası hizmetleri mükemmel! Her türlü soruma hızlıca cevap aldım. Kesinlikle tavsiye ediyorum.</p>
+                        <div class="mt-3">
+                            <h6 class="mb-0">Zeynep Aktaş</h6>
+                            <small class="text-muted">Audi Q5 Sahibi</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star text-warning"></i>
+                        </div>
+                        <p class="card-text">Sivas'ta araç almak isteyenlere kesinlikle Kaan Bey'in galerisini tavsiye ederim. İlgisi ve dürüstlüğü için teşekkür ederim.</p>
+                        <div class="mt-3">
+                            <h6 class="mb-0">Hasan Yılmaz</h6>
+                            <small class="text-muted">Volkswagen Golf Sahibi</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="bg-primary text-white text-center py-5 mb-5" data-aos="fade-up">
+    <div class="container">
+        <h2>Hayalinizdeki Arabayı Bulmaya Hazır mısınız?</h2>
+        <p class="lead">Geniş araç listemizi inceleyin ve size uygun arabayı hemen bulun.</p>
+        <a asp-controller="Cars" asp-action="Index" class="btn btn-light btn-lg mt-3">Hemen Başlayın</a>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="container mb-5" data-aos="fade-up">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h2>Sıkça Sorulan Sorular</h2>
+            <p class="text-muted">Merak ettiğiniz sorulara yanıtlar</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="accordion" id="faqAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Araç satın alma süreci nasıl işliyor?
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Araç satın alma sürecimiz oldukça basittir. Öncelikle sitemizden veya showroom'umuzdan araçları inceleyip seçiminizi yaparsınız. Ardından müşteri temsilcilerimiz size ödeme seçenekleri ve gerekli belgeler hakkında bilgi verir. Tüm işlemler tamamlandığında aracınızı teslim alabilirsiniz.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Araçlarınız garantili mi?
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Evet, tüm araçlarımız detaylı teknik kontrolden geçer ve durumuna göre değişen garantilerle satışa sunulur. Sıfır araçlarımız üretici garantisi ile teslim edilirken, ikinci el araçlarımızın çoğu için kendi garantimizi sağlıyoruz.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Kredi veya taksit seçenekleriniz var mı?
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Birçok banka ile anlaşmalı çalışıyoruz ve müşterilerimize uygun kredi seçenekleri sunuyoruz. Ayrıca belirli araçlarımız için kendi bünyemizde taksit imkanları da sağlıyoruz. Detaylı bilgi için lütfen satış temsilcilerimizle iletişime geçin.
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+
+<!-- Initialize Swiper -->
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Featured Cars Swiper
+            const featuredSwiper = new Swiper('.featured-swiper', {
+                slidesPerView: 1,
+                spaceBetween: 20,
+                loop: true,
+                autoplay: {
+                    delay: 3000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.featured-swiper .swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.featured-swiper .swiper-button-next',
+                    prevEl: '.featured-swiper .swiper-button-prev',
+                },
+                breakpoints: {
+                    640: {
+                        slidesPerView: 2,
+                    },
+                    992: {
+                        slidesPerView: 3,
+                    }
+                }
+            });
+
+            // Testimonials Swiper
+            const testimonialSwiper = new Swiper('.testimonial-swiper', {
+                slidesPerView: 1,
+                spaceBetween: 20,
+                loop: true,
+                autoplay: {
+                    delay: 4000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.testimonial-swiper .swiper-pagination',
+                    clickable: true,
+                },
+                breakpoints: {
+                    768: {
+                        slidesPerView: 2,
+                    },
+                    992: {
+                        slidesPerView: 3,
+                    }
+                }
+            });
+        });
+    </script>
+}

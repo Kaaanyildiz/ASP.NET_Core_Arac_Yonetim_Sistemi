@@ -4,199 +4,205 @@
     ViewData["Title"] = "Yeni Araç Ekle";
 }
 
-<h1>Yeni Araç Ekle</h1>
+<div class="page-banner" data-aos="fade-down">
+    <div class="banner-content">
+        <h1>Yeni Araç Ekle</h1>
+        <p>Araç envanterimize yeni bir araç ekleyin</p>
+    </div>
+</div>
 
-<div class="row">
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h4>Araç Bilgileri</h4>
-            </div>
-            <div class="card-body">
-                <form asp-action="Create" enctype="multipart/form-data">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label asp-for="Brand" class="control-label">Marka</label>
-                                <input asp-for="Brand" class="form-control" />
-                                <span asp-validation-for="Brand" class="text-danger"></span>
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-8" data-aos="fade-up">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-gradient text-white" style="background-color: #4e73df;">
+                    <h4 class="mb-0"><i class="bi bi-car-front me-2"></i>Araç Bilgileri</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Brand" class="control-label fw-bold"><i class="bi bi-tag me-1"></i>Marka</label>
+                                    <input asp-for="Brand" class="form-control" placeholder="Örn: Toyota" />
+                                    <span asp-validation-for="Brand" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Model" class="control-label fw-bold"><i class="bi bi-card-text me-1"></i>Model</label>
+                                    <input asp-for="Model" class="form-control" placeholder="Örn: Corolla" />
+                                    <span asp-validation-for="Model" class="text-danger"></span>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label asp-for="Model" class="control-label">Model</label>
-                                <input asp-for="Model" class="form-control" />
-                                <span asp-validation-for="Model" class="text-danger"></span>
+                        
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Year" class="control-label fw-bold"><i class="bi bi-calendar me-1"></i>Yıl</label>
+                                    <input asp-for="Year" class="form-control" placeholder="Örn: 2023" />
+                                    <span asp-validation-for="Year" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Color" class="control-label fw-bold"><i class="bi bi-palette me-1"></i>Renk</label>
+                                    <input asp-for="Color" class="form-control" placeholder="Örn: Beyaz" />
+                                    <span asp-validation-for="Color" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Mileage" class="control-label fw-bold"><i class="bi bi-speedometer2 me-1"></i>Kilometre</label>
+                                    <input asp-for="Mileage" class="form-control" placeholder="Örn: 15000" />
+                                    <span asp-validation-for="Mileage" class="text-danger"></span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group mb-3">
-                                <label asp-for="Year" class="control-label">Yıl</label>
-                                <input asp-for="Year" class="form-control" />
-                                <span asp-validation-for="Year" class="text-danger"></span>
+                        
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label asp-for="EngineSize" class="control-label">Motor Hacmi</label>
+                                    <input asp-for="EngineSize" class="form-control" />
+                                    <span asp-validation-for="EngineSize" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label asp-for="FuelType" class="control-label">Yakıt Tipi</label>
+                                    <select asp-for="FuelType" class="form-control">
+                                        <option value="">Seçiniz</option>
+                                        <option value="Benzin">Benzin</option>
+                                        <option value="Dizel">Dizel</option>
+                                        <option value="LPG">LPG</option>
+                                        <option value="Hibrit">Hibrit</option>
+                                        <option value="Elektrik">Elektrik</option>
+                                    </select>
+                                    <span asp-validation-for="FuelType" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label asp-for="FuelEfficiency" class="control-label">Yakıt Tüketimi (lt/100km)</label>
+                                    <input asp-for="FuelEfficiency" class="form-control" />
+                                    <span asp-validation-for="FuelEfficiency" class="text-danger"></span>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group mb-3">
-                                <label asp-for="Color" class="control-label">Renk</label>
-                                <input asp-for="Color" class="form-control" />
-                                <span asp-validation-for="Color" class="text-danger"></span>
+                        
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Transmission" class="control-label">Şanzıman</label>
+                                    <select asp-for="Transmission" class="form-control">
+                                        <option value="">Seçiniz</option>
+                                        <option value="Manuel">Manuel</option>
+                                        <option value="Otomatik">Otomatik</option>
+                                        <option value="Yarı Otomatik">Yarı Otomatik</option>
+                                        <option value="CVT">CVT</option>
+                                        <option value="DCT">DCT</option>
+                                        <option value="PDK">PDK</option>
+                                    </select>
+                                    <span asp-validation-for="Transmission" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label asp-for="BodyType" class="control-label">Kasa Tipi</label>
+                                    <select asp-for="BodyType" class="form-control">
+                                        <option value="">Seçiniz</option>
+                                        <option value="Sedan">Sedan</option>
+                                        <option value="Hatchback">Hatchback</option>
+                                        <option value="SUV">SUV</option>
+                                        <option value="Coupe">Coupe</option>
+                                        <option value="Convertible">Convertible</option>
+                                        <option value="Station Wagon">Station Wagon</option>
+                                        <option value="MPV">MPV</option>
+                                    </select>
+                                    <span asp-validation-for="BodyType" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Doors" class="control-label">Kapı Sayısı</label>
+                                    <select asp-for="Doors" class="form-control">
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                    <span asp-validation-for="Doors" class="text-danger"></span>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group mb-3">
-                                <label asp-for="Mileage" class="control-label">Kilometre</label>
-                                <input asp-for="Mileage" class="form-control" />
-                                <span asp-validation-for="Mileage" class="text-danger"></span>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="CarTypeId" class="control-label">Araç Kategorisi</label>
+                                    <select asp-for="CarTypeId" class="form-control" asp-items="ViewBag.CarTypes"></select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="ImageUrl" class="control-label">Resim URL'i</label>
+                                    <input asp-for="ImageUrl" class="form-control" />
+                                    <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                                    <small class="form-text text-muted">Örnek: https://example.com/car-image.jpg</small>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label asp-for="Price" class="control-label">Fiyat (₺)</label>
-                                <input asp-for="Price" class="form-control" />
-                                <span asp-validation-for="Price" class="text-danger"></span>
-                            </div>
+                        
+                        <div class="form-group mb-3">
+                            <label asp-for="Features" class="control-label">Özellikler</label>
+                            <textarea asp-for="Features" class="form-control" rows="3" placeholder="Örn: Deri koltuk, Navigasyon, Geri görüş kamerası..."></textarea>
+                            <span asp-validation-for="Features" class="text-danger"></span>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label asp-for="DiscountPercentage" class="control-label">İndirim (%) (opsiyonel)</label>
-                                <input asp-for="DiscountPercentage" class="form-control" />
-                                <span asp-validation-for="DiscountPercentage" class="text-danger"></span>
-                            </div>
+                        
+                        <div class="form-group mb-3">
+                            <label asp-for="Description" class="control-label">Açıklama</label>
+                            <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
                         </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group mb-3">
-                                <label asp-for="EngineSize" class="control-label">Motor Hacmi</label>
-                                <input asp-for="EngineSize" class="form-control" />
-                                <span asp-validation-for="EngineSize" class="text-danger"></span>
-                            </div>
+                        
+                        <div class="form-group mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg px-4">
+                                <i class="bi bi-save me-2"></i>Kaydet
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary btn-lg px-4 ms-2">
+                                <i class="bi bi-x-circle me-2"></i>İptal
+                            </a>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group mb-3">
-                                <label asp-for="FuelType" class="control-label">Yakıt Tipi</label>
-                                <select asp-for="FuelType" class="form-control">
-                                    <option value="">Seçiniz</option>
-                                    <option value="Benzin">Benzin</option>
-                                    <option value="Dizel">Dizel</option>
-                                    <option value="LPG">LPG</option>
-                                    <option value="Hibrit">Hibrit</option>
-                                    <option value="Elektrik">Elektrik</option>
-                                </select>
-                                <span asp-validation-for="FuelType" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group mb-3">
-                                <label asp-for="FuelEfficiency" class="control-label">Yakıt Tüketimi (lt/100km)</label>
-                                <input asp-for="FuelEfficiency" class="form-control" />
-                                <span asp-validation-for="FuelEfficiency" class="text-danger"></span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group mb-3">
-                                <label asp-for="Transmission" class="control-label">Şanzıman</label>
-                                <select asp-for="Transmission" class="form-control">
-                                    <option value="">Seçiniz</option>
-                                    <option value="Manuel">Manuel</option>
-                                    <option value="Otomatik">Otomatik</option>
-                                    <option value="Yarı Otomatik">Yarı Otomatik</option>
-                                    <option value="CVT">CVT</option>
-                                    <option value="DCT">DCT</option>
-                                    <option value="PDK">PDK</option>
-                                </select>
-                                <span asp-validation-for="Transmission" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group mb-3">
-                                <label asp-for="BodyType" class="control-label">Kasa Tipi</label>
-                                <select asp-for="BodyType" class="form-control">
-                                    <option value="">Seçiniz</option>
-                                    <option value="Sedan">Sedan</option>
-                                    <option value="Hatchback">Hatchback</option>
-                                    <option value="SUV">SUV</option>
-                                    <option value="Coupe">Coupe</option>
-                                    <option value="Convertible">Convertible</option>
-                                    <option value="Station Wagon">Station Wagon</option>
-                                    <option value="MPV">MPV</option>
-                                </select>
-                                <span asp-validation-for="BodyType" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group mb-3">
-                                <label asp-for="Doors" class="control-label">Kapı Sayısı</label>
-                                <select asp-for="Doors" class="form-control">
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                </select>
-                                <span asp-validation-for="Doors" class="text-danger"></span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label asp-for="CarTypeId" class="control-label">Araç Kategorisi</label>
-                                <select asp-for="CarTypeId" class="form-control" asp-items="ViewBag.CarTypes"></select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label asp-for="ImageUrl" class="control-label">Resim URL'i</label>
-                                <input asp-for="ImageUrl" class="form-control" />
-                                <span asp-validation-for="ImageUrl" class="text-danger"></span>
-                                <small class="form-text text-muted">Örnek: https://example.com/car-image.jpg</small>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group mb-3">
-                        <label asp-for="Features" class="control-label">Özellikler</label>
-                        <textarea asp-for="Features" class="form-control" rows="3" placeholder="Örn: Deri koltuk, Navigasyon, Geri görüş kamerası..."></textarea>
-                        <span asp-validation-for="Features" class="text-danger"></span>
-                    </div>
-                    
-                    <div class="form-group mb-3">
-                        <label asp-for="Description" class="control-label">Açıklama</label>
-                        <textarea asp-for="Description" class="form-control" rows="5"></textarea>
-                        <span asp-validation-for="Description" class="text-danger"></span>
-                    </div>
-                    
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Kaydet</button>
-                        <a asp-action="Index" class="btn btn-secondary">İptal</a>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card mb-4">
-            <div class="card-header bg-info text-white">
-                <h4>Bilgi</h4>
-            </div>
-            <div class="card-body">
-                <p>Tüm zorunlu alanları doldurun. Araç sisteme eklendiğinde otomatik olarak "Satışta" durumunda olacaktır.</p>
-                <p>İndirim alanı doldurulursa, indirimli fiyat otomatik olarak hesaplanacaktır.</p>
-                <p>Resim URL'i eklerseniz, araç listesinde ve detay sayfasında gösterilecektir.</p>
+        <div class="col-md-4" data-aos="fade-left" data-aos-delay="200">
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-header bg-gradient text-white" style="background-color: #1cc88a;">
+                    <h4 class="mb-0"><i class="bi bi-info-circle me-2"></i>Bilgi</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="bi bi-lightbulb-fill me-2"></i>
+                        Tüm zorunlu alanları doldurun. Araç sisteme eklendiğinde otomatik olarak "Satışta" durumunda olacaktır.
+                    </div>
+                    <div class="alert alert-warning">
+                        <i class="bi bi-percent me-2"></i>
+                        İndirim alanı doldurulursa, indirimli fiyat otomatik olarak hesaplanacaktır.
+                    </div>
+                    <div class="alert alert-success">
+                        <i class="bi bi-image me-2"></i>
+                        Resim URL'i eklerseniz, araç listesinde ve detay sayfasında gösterilecektir.
+                    </div>
+                    <div class="text-center mt-4">
+                        <img src="/images/car-add.png" alt="Araç Ekle" class="img-fluid rounded" onerror="this.src='/images/car-placeholder.jpg'; this.onerror=null;">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -204,4 +210,13 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // AOS kütüphanesi için animasyonları başlat
+        $(document).ready(function() {
+            AOS.init({
+                duration: 800,
+                once: true
+            });
+        });
+    </script>
 }

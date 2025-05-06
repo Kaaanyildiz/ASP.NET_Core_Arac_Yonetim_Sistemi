@@ -6,7 +6,7 @@ namespace identityApp.Models
     public static class IdentitySeedData
     {
         private const string adminUser = "Admin";
-        private const string adminPassword = "Admin1234";
+        private const string adminPassword = "Admin123"; // Daha basit bir şifre
         private const string adminRole = "Admin";
 
 
@@ -26,30 +26,27 @@ namespace identityApp.Models
                 await roleManager.CreateAsync(new IdentityRole(adminRole));
             }
 
+            // Admin kullanıcısını bul
             var user = await userManager.FindByNameAsync(adminUser);
             
-            if (user == null)
+            // Eğer admin kullanıcısı varsa sil (her zaman yeni admin oluştur)
+            if (user != null)
             {
-                user = new AppUser
-                {
-                    UserName = adminUser,
-                    Email = "admin@fatmanurkilickaya.com",
-                    PhoneNumber = "33333",
-                    EmailConfirmed = true,
-                    FullName = "Admin User"
-                };
+                await userManager.DeleteAsync(user);
+            }
+            
+            // Yeni admin kullanıcısı oluştur
+            user = new AppUser
+            {
+                UserName = adminUser,
+                Email = "admin@fatmanurkilickaya.com",
+                PhoneNumber = "33333",
+                EmailConfirmed = true,
+                FullName = "Admin User"
+            };
 
-                await userManager.CreateAsync(user, adminPassword);
-                await userManager.AddToRoleAsync(user, adminRole);
-            }
-            else 
-            {
-                // Kullanıcı zaten varsa, admin rolünde olduğundan emin ol
-                if (!await userManager.IsInRoleAsync(user, adminRole))
-                {
-                    await userManager.AddToRoleAsync(user, adminRole);
-                }
-            }
+            await userManager.CreateAsync(user, adminPassword);
+            await userManager.AddToRoleAsync(user, adminRole);
 
             // Araç kategorilerini ekle
             if (!context.CarTypes.Any())
@@ -98,7 +95,7 @@ namespace identityApp.Models
                     EngineSize = "1.6", 
                     Description = "Hatasız boyasız Mercedes C180", 
                     IsAvailable = true,
-                    ImageUrl = "https://img.freepik.com/free-photo/blue-car-driving-road_114579-4056.jpg",
+                    ImageUrl = "https://resim.epey.com/2264/m_mercedes-c-180-156-ps-amg-21.jpg",
                     FuelType = "Benzin",
                     Transmission = "Otomatik",
                     BodyType = "Sedan",
@@ -118,7 +115,7 @@ namespace identityApp.Models
                     EngineSize = "2.0", 
                     Description = "Tam donanım BMW 320i", 
                     IsAvailable = true,
-                    ImageUrl = "https://img.freepik.com/free-photo/white-premium-city-car-with-original-design-generative-ai_188544-8251.jpg",
+                    ImageUrl = "https://img.freepik.com/premium-photo/bmw-320i-is-compact-executive-car-manufactured-by-german-automaker-bmw_776859-775.jpg?w=1060",
                     FuelType = "Benzin",
                     Transmission = "Otomatik",
                     BodyType = "Sedan",
@@ -139,7 +136,7 @@ namespace identityApp.Models
                     EngineSize = "2.0", 
                     Description = "Audi A4 Quattro, 4x4 çekiş sistemi", 
                     IsAvailable = true,
-                    ImageUrl = "https://img.freepik.com/free-photo/blue-coupe-sport-car-highway-bridge-road_114579-4051.jpg",
+                    ImageUrl = "https://images.unsplash.com/photo-1726003536800-b9ec0888cf36?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                     FuelType = "Dizel",
                     Transmission = "Otomatik",
                     BodyType = "Sedan",
@@ -161,7 +158,7 @@ namespace identityApp.Models
                     EngineSize = "1.5",
                     Description = "Volkswagen Golf 8 eTSI DSG",
                     IsAvailable = true,
-                    ImageUrl = "https://img.freepik.com/free-photo/red-generic-suv-car-white-background-3d-illustration_101266-15530.jpg",
+                    ImageUrl = "https://images.pexels.com/photos/19109790/pexels-photo-19109790/free-photo-of-hizli-suratli-otomotiv-toprak-yol.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
                     FuelType = "Benzin",
                     Transmission = "Otomatik",
                     BodyType = "Hatchback",
@@ -182,7 +179,7 @@ namespace identityApp.Models
                     EngineSize = "1.0",
                     Description = "Yeni Renault Clio, sıfır kilometre",
                     IsAvailable = true,
-                    ImageUrl = "https://img.freepik.com/free-photo/orange-hatchback-car-white-background_53876-89767.jpg",
+                    ImageUrl = "https://images.unsplash.com/photo-1666335009171-3ddc17937d6d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                     FuelType = "Benzin",
                     Transmission = "Manuel",
                     BodyType = "Hatchback",
@@ -202,7 +199,7 @@ namespace identityApp.Models
                     EngineSize = "1.5",
                     Description = "Ford Focus ST-Line, sportif tasarım",
                     IsAvailable = true,
-                    ImageUrl = "https://img.freepik.com/free-photo/blue-compact-suv-car-with-sport-modern-design-parked-road-3d-illustration_101266-15331.jpg",
+                    ImageUrl = "https://images.unsplash.com/photo-1625179298498-9deecbfa38cb?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                     FuelType = "Dizel",
                     Transmission = "Otomatik",
                     BodyType = "Hatchback",
@@ -224,7 +221,7 @@ namespace identityApp.Models
                     EngineSize = "1.8",
                     Description = "Toyota Corolla Hybrid, yakıt tasarruflu",
                     IsAvailable = true,
-                    ImageUrl = "https://img.freepik.com/free-photo/silver-metallic-color-sport-sedan-road_114579-5035.jpg",
+                    ImageUrl = "https://images.unsplash.com/photo-1638618164682-12b986ec2a75?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                     FuelType = "Hibrit",
                     Transmission = "CVT",
                     BodyType = "Sedan",
@@ -244,7 +241,7 @@ namespace identityApp.Models
                     EngineSize = "1.5",
                     Description = "Honda Civic Sedan Turbo, sportif tasarım",
                     IsAvailable = true,
-                    ImageUrl = "https://img.freepik.com/free-photo/black-sedan-car-driving-road_114579-4039.jpg",
+                    ImageUrl = "https://images.pexels.com/photos/17654204/pexels-photo-17654204/free-photo-of-otoparkta-siyah-honda-civic.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
                     FuelType = "Benzin",
                     Transmission = "CVT",
                     BodyType = "Sedan",
@@ -267,7 +264,7 @@ namespace identityApp.Models
                     EngineSize = "Elektrik",
                     Description = "Tesla Model Y Performance, elektrikli SUV",
                     IsAvailable = true,
-                    ImageUrl = "https://img.freepik.com/free-photo/white-suv-car-isolated-white-background_53876-137017.jpg",
+                    ImageUrl = "https://images.pexels.com/photos/15089585/pexels-photo-15089585/free-photo-of-araba-otomobil-arac-elektrik.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
                     FuelType = "Elektrik",
                     Transmission = "Otomatik",
                     BodyType = "SUV",
@@ -287,7 +284,7 @@ namespace identityApp.Models
                     EngineSize = "2.0",
                     Description = "Range Rover Evoque R-Dynamic, lüks SUV",
                     IsAvailable = true,
-                    ImageUrl = "https://img.freepik.com/free-photo/luxury-offroad-vehicle-sunset_23-2150850418.jpg",
+                    ImageUrl = "https://arabam-blog.mncdn.com/wp-content/uploads/2021/02/range-rover-evoque-22-1068x602.jpg",
                     FuelType = "Dizel",
                     Transmission = "Otomatik",
                     BodyType = "SUV",
@@ -307,7 +304,7 @@ namespace identityApp.Models
                     EngineSize = "2.0",
                     Description = "Audi Q5 Quattro, lüks SUV",
                     IsAvailable = true,
-                    ImageUrl = "https://img.freepik.com/free-photo/white-suv-car-road_114579-4014.jpg",
+                    ImageUrl = "https://images.pexels.com/photos/20220997/pexels-photo-20220997/free-photo-of-araba-otomobil-arac-suv.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
                     FuelType = "Dizel",
                     Transmission = "Otomatik",
                     BodyType = "SUV",
@@ -329,7 +326,7 @@ namespace identityApp.Models
                     EngineSize = "3.0",
                     Description = "Porsche 911 Carrera S, spor otomobil",
                     IsAvailable = true,
-                    ImageUrl = "https://img.freepik.com/free-photo/yellow-sport-car-with-black-autotuning-road_114579-5051.jpg",
+                    ImageUrl = "https://images.unsplash.com/photo-1593353798398-6024b7444bb6?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                     FuelType = "Benzin",
                     Transmission = "PDK",
                     BodyType = "Coupe",
@@ -349,7 +346,7 @@ namespace identityApp.Models
                     EngineSize = "3.0",
                     Description = "BMW M4 Competition, yüksek performanslı spor araba",
                     IsAvailable = true,
-                    ImageUrl = "https://img.freepik.com/free-photo/sports-car-driving-high-speed-highway_114579-4046.jpg",
+                    ImageUrl = "https://images.unsplash.com/photo-1617531653332-bd46c24f2068?q=80&w=1830&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                     FuelType = "Benzin",
                     Transmission = "Otomatik",
                     BodyType = "Coupe",
@@ -371,7 +368,7 @@ namespace identityApp.Models
                     EngineSize = "1.6",
                     Description = "Yeni Hyundai Tucson, hibrit teknolojisi",
                     IsAvailable = true,
-                    ImageUrl = "https://img.freepik.com/free-photo/green-mini-suv-car-with-urban-background-3d-illustration_101266-15332.jpg",
+                    ImageUrl = "https://images.unsplash.com/photo-1575090536203-2a6193126514?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                     FuelType = "Hibrit",
                     Transmission = "Otomatik",
                     BodyType = "SUV",
@@ -391,7 +388,7 @@ namespace identityApp.Models
                     EngineSize = "1.6",
                     Description = "Kia Sportage, şık tasarımlı SUV",
                     IsAvailable = true,
-                    ImageUrl = "https://img.freepik.com/free-photo/dark-gray-sport-utility-vehicle-road_114579-5044.jpg",
+                    ImageUrl = "https://images.unsplash.com/photo-1649921777129-a28a26031a03?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                     FuelType = "Benzin",
                     Transmission = "Otomatik",
                     BodyType = "SUV",
@@ -414,7 +411,7 @@ namespace identityApp.Models
                     EngineSize = "Elektrik",
                     Description = "Tesla Model 3 Performance, elektrikli sedan",
                     IsAvailable = true,
-                    ImageUrl = "https://img.freepik.com/free-photo/sedan-white-car-isolated-white-background-3d-illustration_101266-15531.jpg",
+                    ImageUrl = "https://images.unsplash.com/photo-1585011664466-b7bbe92f34ef?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                     FuelType = "Elektrik",
                     Transmission = "Otomatik",
                     BodyType = "Sedan",
@@ -434,7 +431,7 @@ namespace identityApp.Models
                     EngineSize = "Elektrik",
                     Description = "Volkswagen ID.4, elektrikli SUV",
                     IsAvailable = true,
-                    ImageUrl = "https://img.freepik.com/free-photo/blue-jeep-parking-public-zone_114579-4042.jpg",
+                    ImageUrl = "https://img.freepik.com/premium-photo/silver-car-with-number-2-side_845403-1773.jpg?w=1380",
                     FuelType = "Elektrik",
                     Transmission = "Otomatik",
                     BodyType = "SUV",
@@ -456,7 +453,7 @@ namespace identityApp.Models
                     EngineSize = "2.0",
                     Description = "Volkswagen Caravelle, geniş aileler için ideal araç",
                     IsAvailable = true,
-                    ImageUrl = "https://img.freepik.com/free-photo/minivan-car-3d-vector-icon-simple-car-icon-illustration_634243-86.jpg",
+                    ImageUrl = "https://i.pinimg.com/736x/43/11/aa/4311aa91407b4bd10c55fead8f6c7f94.jpg",
                     FuelType = "Dizel",
                     Transmission = "Otomatik",
                     BodyType = "MPV",
@@ -478,7 +475,7 @@ namespace identityApp.Models
                     EngineSize = "1.4",
                     Description = "Fiat Egea, ekonomik sedan",
                     IsAvailable = true,
-                    ImageUrl = "https://img.freepik.com/free-photo/white-car-isolated-white-background_53876-12096.jpg",
+                    ImageUrl = "https://i0.wp.com/bestsellingcarsblog.com/wp-content/uploads/2019/03/Fiat-Egea-Turkey-February-2019.jpg?w=600&ssl=1",
                     FuelType = "Benzin",
                     Transmission = "Manuel",
                     BodyType = "Sedan",
@@ -499,7 +496,7 @@ namespace identityApp.Models
                     EngineSize = "1.0",
                     Description = "Dacia Sandero, ekonomik hatchback",
                     IsAvailable = true,
-                    ImageUrl = "https://img.freepik.com/free-photo/blue-hatchback-parked-public-parking-space_114579-4042.jpg",
+                    ImageUrl = "https://cdn.motor1.com/images/mgl/KbmWnq/s3/dacia-sandero-stepway-extreme-2023.webp",
                     FuelType = "Benzin",
                     Transmission = "Manuel",
                     BodyType = "Hatchback",
@@ -522,7 +519,7 @@ namespace identityApp.Models
                     EngineSize = "2.0",
                     Description = "Volvo V60, güvenli ve geniş station wagon",
                     IsAvailable = true,
-                    ImageUrl = "https://img.freepik.com/free-photo/front-view-silver-modern-car-parked-road_114579-5028.jpg",
+                    ImageUrl = "https://v.wpimg.pl/ZTU1NS5qdTU0UzhgGgp4IHcLbDpcU3Z2IBN0cRpIaWwtBHxrGhx0NSBFIThAHS56JV1hJVodLDt4R3hjGBVueW0cK2YEFzlhNAV6YwIQaDFgBHt9XwE9dig",
                     FuelType = "Dizel",
                     Transmission = "Otomatik",
                     BodyType = "Station Wagon",
@@ -544,7 +541,7 @@ namespace identityApp.Models
                     EngineSize = "2.0",
                     Description = "BMW 430i Convertible, açılabilir tavanlı",
                     IsAvailable = true,
-                    ImageUrl = "https://img.freepik.com/free-photo/red-convertible-sports-car-driving-road_114579-4060.jpg",
+                    ImageUrl = "https://img.freepik.com/premium-photo/white-convertible-car-with-brown-interior-is-parked-street-against-gray-wall_1302699-12.jpg?w=1060",
                     FuelType = "Benzin",
                     Transmission = "Otomatik",
                     BodyType = "Convertible",

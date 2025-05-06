@@ -4,237 +4,364 @@
     ViewData["Title"] = $"{Model.Brand} {Model.Model}";
 }
 
-<div class="row">
-    <div class="col-md-8">
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                <h2>@Model.Brand @Model.Model (@Model.Year)</h2>
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <form asp-action="ToggleFavorite" asp-route-id="@Model.Id" method="post">
-                        <button type="submit" class="btn @(ViewBag.IsFavorite == true ? "btn-warning" : "btn-outline-warning")" 
-                                title="@(ViewBag.IsFavorite == true ? "Favorilerden Çıkar" : "Favorilere Ekle")">
-                            <i class="bi bi-star-fill"></i>
-                        </button>
-                    </form>
-                }
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-12 mb-4">
-                        @if (!string.IsNullOrEmpty(Model.ImageUrl))
-                        {
-                            <img src="@Model.ImageUrl" class="img-fluid rounded w-100" style="max-height: 400px; object-fit: cover;" alt="@Model.Brand @Model.Model">
-                        }
-                        else
-                        {
-                            <div class="bg-light text-center p-5 rounded">
-                                <i class="bi bi-car-front display-1 text-muted"></i>
-                                <p class="text-muted">Resim bulunamadı</p>
-                            </div>
-                        }
-                    </div>
-                </div>
-
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <div class="card h-100">
-                            <div class="card-header bg-info text-white">
-                                <h5>Araç Bilgileri</h5>
-                            </div>
-                            <div class="card-body">
-                                <table class="table table-hover">
-                                    <tbody>
-                                        <tr>
-                                            <th>Kategori:</th>
-                                            <td>@(Model.CarType?.Name ?? "Belirtilmemiş")</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Marka:</th>
-                                            <td>@Model.Brand</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Model:</th>
-                                            <td>@Model.Model</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Yıl:</th>
-                                            <td>@Model.Year</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Renk:</th>
-                                            <td>@Model.Color</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Kilometre:</th>
-                                            <td>@Model.Mileage km</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Kasa Tipi:</th>
-                                            <td>@Model.BodyType</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Kapı Sayısı:</th>
-                                            <td>@Model.Doors</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card h-100">
-                            <div class="card-header bg-info text-white">
-                                <h5>Motor ve Performans</h5>
-                            </div>
-                            <div class="card-body">
-                                <table class="table table-hover">
-                                    <tbody>
-                                        <tr>
-                                            <th>Motor Hacmi:</th>
-                                            <td>@Model.EngineSize</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Yakıt Tipi:</th>
-                                            <td>@Model.FuelType</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Şanzıman:</th>
-                                            <td>@Model.Transmission</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Yakıt Tüketimi:</th>
-                                            <td>@(Model.FuelType == "Elektrik" ? "Elektrikli" : $"{Model.FuelEfficiency} lt/100km")</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card mb-4">
-                            <div class="card-header bg-success text-white">
-                                <h5>Özellikler</h5>
-                            </div>
-                            <div class="card-body">
-                                @if (!string.IsNullOrEmpty(Model.Features))
-                                {
-                                    <p>@Model.Features</p>
-                                }
-                                else
-                                {
-                                    <p class="text-muted">Belirtilmemiş</p>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card mb-4">
-                            <div class="card-header bg-dark text-white">
-                                <h5>Açıklama</h5>
-                            </div>
-                            <div class="card-body">
-                                @if (!string.IsNullOrEmpty(Model.Description))
-                                {
-                                    <p>@Model.Description</p>
-                                }
-                                else
-                                {
-                                    <p class="text-muted">Açıklama yok</p>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="page-banner" data-aos="fade-down">
+    <div class="banner-content">
+        <h1>@Model.Brand @Model.Model</h1>
+        <p>@Model.Year | @Model.Color | @Model.FuelType</p>
     </div>
+</div>
 
-    <div class="col-md-4">
-        <div class="card mb-4">
-            <div class="card-header bg-danger text-white">
-                <h4>Fiyat Bilgisi</h4>
-            </div>
-            <div class="card-body">
-                @if (Model.DiscountPercentage.HasValue && Model.DiscountPercentage.Value > 0)
-                {
-                    <div class="text-center">
-                        <h3 class="text-danger">
-                            <span class="text-decoration-line-through text-muted">@Model.Price.ToString("N0") ₺</span>
-                        </h3>
-                        <h2 class="text-success">@Model.DiscountedPrice?.ToString("N0") ₺</h2>
-                        <div class="badge bg-warning text-dark">%@Model.DiscountPercentage İndirim</div>
-                    </div>
-                }
-                else
-                {
-                    <div class="text-center">
-                        <h2 class="text-danger">@Model.Price.ToString("N0") ₺</h2>
-                    </div>
-                }
-                
-                <hr />
-                
-                <div class="d-grid gap-2">
-                    <a href="tel:+905001234567" class="btn btn-success btn-lg">
-                        <i class="bi bi-telephone-fill"></i> Hemen Ara
-                    </a>
-                    <button class="btn btn-outline-primary">
-                        <i class="bi bi-chat-dots-fill"></i> Mesaj Gönder
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <div class="card mb-4">
-            <div class="card-header bg-secondary text-white">
-                <h5>Araç Durumu</h5>
-            </div>
-            <div class="card-body text-center">
-                @if (Model.IsAvailable)
-                {
-                    <div class="alert alert-success">
-                        <i class="bi bi-check-circle-fill"></i> Satışta
-                    </div>
-                }
-                else
-                {
-                    <div class="alert alert-danger">
-                        <i class="bi bi-x-circle-fill"></i> Satışta Değil
-                    </div>
-                }
-                <p class="mb-1"><small>Eklenme Tarihi: @Model.DateAdded.ToString("dd.MM.yyyy")</small></p>
-            </div>
-        </div>
-        
-        @if (User.IsInRole("Admin"))
-        {
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h5>Yönetim</h5>
-                </div>
-                <div class="card-body">
-                    <div class="d-grid gap-2">
-                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Düzenle</a>
-                        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Sil</a>
-                        <form asp-action="ToggleAvailability" asp-route-id="@Model.Id" method="post">
-                            <button type="submit" class="btn btn-outline-primary w-100">
-                                @(Model.IsAvailable ? "Satıştan Kaldır" : "Satışa Koy")
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-8" data-aos="fade-right">
+            <div class="card mb-4 border-0 shadow">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0 fs-4">@Model.Brand @Model.Model (@Model.Year)</h2>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <form asp-action="ToggleFavorite" asp-route-id="@Model.Id" method="post">
+                            <button type="submit" class="btn @(ViewBag.IsFavorite == true ? "btn-warning" : "btn-outline-light")" 
+                                    title="@(ViewBag.IsFavorite == true ? "Favorilerden Çıkar" : "Favorilere Ekle")">
+                                <i class="bi bi-star-fill"></i>
                             </button>
                         </form>
+                    }
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 mb-4">
+                            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                            {
+                                <div class="car-image-container" data-aos="zoom-in">
+                                    <img src="@Model.ImageUrl" class="img-fluid rounded w-100" alt="@Model.Brand @Model.Model">
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="bg-light text-center p-5 rounded" data-aos="fade-in">
+                                    <i class="bi bi-car-front display-1 text-muted"></i>
+                                    <p class="text-muted">Resim bulunamadı</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
+                            <div class="card h-100 border-0 shadow-sm">
+                                <div class="card-header bg-gradient text-white" style="background-color: #4e73df;">
+                                    <h5 class="mb-0"><i class="bi bi-info-circle me-2"></i>Araç Bilgileri</h5>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                            <tr>
+                                                <th><i class="bi bi-tag me-2"></i>Kategori:</th>
+                                                <td>@(Model.CarType?.Name ?? "Belirtilmemiş")</td>
+                                            </tr>
+                                            <tr>
+                                                <th><i class="bi bi-car-front me-2"></i>Marka:</th>
+                                                <td>@Model.Brand</td>
+                                            </tr>
+                                            <tr>
+                                                <th><i class="bi bi-card-text me-2"></i>Model:</th>
+                                                <td>@Model.Model</td>
+                                            </tr>
+                                            <tr>
+                                                <th><i class="bi bi-calendar me-2"></i>Yıl:</th>
+                                                <td>@Model.Year</td>
+                                            </tr>
+                                            <tr>
+                                                <th><i class="bi bi-palette me-2"></i>Renk:</th>
+                                                <td>@Model.Color</td>
+                                            </tr>
+                                            <tr>
+                                                <th><i class="bi bi-speedometer2 me-2"></i>Kilometre:</th>
+                                                <td>@Model.Mileage km</td>
+                                            </tr>
+                                            <tr>
+                                                <th><i class="bi bi-truck me-2"></i>Kasa Tipi:</th>
+                                                <td>@Model.BodyType</td>
+                                            </tr>
+                                            <tr>
+                                                <th><i class="bi bi-door-closed me-2"></i>Kapı Sayısı:</th>
+                                                <td>@Model.Doors</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
+                            <div class="card h-100 border-0 shadow-sm">
+                                <div class="card-header bg-gradient text-white" style="background-color: #1cc88a;">
+                                    <h5 class="mb-0"><i class="bi bi-gear me-2"></i>Motor ve Performans</h5>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                            <tr>
+                                                <th><i class="bi bi-cpu me-2"></i>Motor Hacmi:</th>
+                                                <td>@Model.EngineSize</td>
+                                            </tr>
+                                            <tr>
+                                                <th><i class="bi bi-fuel-pump me-2"></i>Yakıt Tipi:</th>
+                                                <td>@Model.FuelType</td>
+                                            </tr>
+                                            <tr>
+                                                <th><i class="bi bi-gear-wide me-2"></i>Şanzıman:</th>
+                                                <td>@Model.Transmission</td>
+                                            </tr>
+                                            <tr>
+                                                <th><i class="bi bi-droplet-half me-2"></i>Yakıt Tüketimi:</th>
+                                                <td>@(Model.FuelType == "Elektrik" ? "Elektrikli" : $"{Model.FuelEfficiency} lt/100km")</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12" data-aos="fade-up" data-aos-delay="300">
+                            <div class="card mb-4 border-0 shadow-sm">
+                                <div class="card-header bg-gradient text-white" style="background-color: #36b9cc;">
+                                    <h5 class="mb-0"><i class="bi bi-list-check me-2"></i>Özellikler</h5>
+                                </div>
+                                <div class="card-body">
+                                    @if (!string.IsNullOrEmpty(Model.Features))
+                                    {
+                                        <div class="features-list">
+                                            @foreach (var feature in Model.Features.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                                            {
+                                                <span class="feature-item"><i class="bi bi-check-circle-fill me-2"></i>@feature.Trim()</span>
+                                            }
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <p class="text-muted">Belirtilmemiş</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12" data-aos="fade-up" data-aos-delay="400">
+                            <div class="card mb-4 border-0 shadow-sm">
+                                <div class="card-header bg-gradient text-white" style="background-color: #2c3e50;">
+                                    <h5 class="mb-0"><i class="bi bi-file-text me-2"></i>Açıklama</h5>
+                                </div>
+                                <div class="card-body">
+                                    @if (!string.IsNullOrEmpty(Model.Description))
+                                    {
+                                        <p>@Model.Description</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="text-muted">Açıklama yok</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        }
+        </div>
+
+        <div class="col-md-4" data-aos="fade-left">
+            <div class="card mb-4 border-0 shadow position-sticky" style="top: 20px;">
+                <div class="card-header bg-gradient text-white" style="background-color: #e74a3b;">
+                    <h4 class="mb-0"><i class="bi bi-tag-fill me-2"></i>Fiyat Bilgisi</h4>
+                </div>
+                <div class="card-body">
+                    @if (Model.DiscountPercentage.HasValue && Model.DiscountPercentage.Value > 0)
+                    {
+                        <div class="text-center mb-4">
+                            <h3 class="text-muted text-decoration-line-through mb-1">
+                                @Model.Price.ToString("N0") ₺
+                            </h3>
+                            <div class="position-relative d-inline-block">
+                                <h2 class="text-danger mb-0 display-5 fw-bold">@Model.DiscountedPrice?.ToString("N0") ₺</h2>
+                                <div class="discount-label">%@Model.DiscountPercentage İNDİRİM</div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center mb-4">
+                            <h2 class="text-danger display-5 fw-bold">@Model.Price.ToString("N0") ₺</h2>
+                        </div>
+                    }
+                    
+                    <hr />
+                    
+                    <div class="d-grid gap-3">
+                        <a href="tel:+905541927475" class="btn btn-success btn-lg contact-btn">
+                            <i class="bi bi-telephone-fill me-2"></i> Hemen Ara
+                        </a>
+                        <a href="https://wa.me/905541927475?text=@(Uri.EscapeDataString($"{Model.Brand} {Model.Model} aracı hakkında bilgi almak istiyorum."))" 
+                           class="btn btn-outline-success contact-btn">
+                            <i class="bi bi-whatsapp me-2"></i> WhatsApp ile İletişim
+                        </a>
+                        <a href="mailto:kaaanyildz@gmail.com?subject=@(Uri.EscapeDataString($"{Model.Brand} {Model.Model} Araç Hakkında"))&body=@(Uri.EscapeDataString($"Merhaba,\n\n{Model.Brand} {Model.Model} aracınız hakkında bilgi almak istiyorum."))" 
+                           class="btn btn-outline-primary contact-btn">
+                            <i class="bi bi-envelope-fill me-2"></i> E-posta Gönder
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mb-4 border-0 shadow">
+                <div class="card-header bg-gradient text-white" style="background-color: #858796;">
+                    <h5 class="mb-0"><i class="bi bi-info-circle-fill me-2"></i>Araç Durumu</h5>
+                </div>
+                <div class="card-body text-center">
+                    @if (Model.IsAvailable)
+                    {
+                        <div class="alert alert-success">
+                            <i class="bi bi-check-circle-fill me-2"></i> Satışta
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-danger">
+                            <i class="bi bi-x-circle-fill me-2"></i> Satışta Değil
+                        </div>
+                    }
+                    <p class="mb-1"><small>Eklenme Tarihi: <i class="bi bi-calendar-check me-1"></i>@Model.DateAdded.ToString("dd.MM.yyyy")</small></p>
+                </div>
+            </div>
+            
+            @if (User.IsInRole("Admin"))
+            {
+                <div class="card mb-4 border-0 shadow">
+                    <div class="card-header bg-gradient text-white" style="background-color: #4e73df;">
+                        <h5 class="mb-0"><i class="bi bi-gear-fill me-2"></i>Yönetim</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                                <i class="bi bi-pencil-fill me-2"></i> Düzenle
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">
+                                <i class="bi bi-trash-fill me-2"></i> Sil
+                            </a>
+                            <form asp-action="ToggleAvailability" asp-route-id="@Model.Id" method="post">
+                                <button type="submit" class="btn btn-outline-primary w-100">
+                                    <i class="bi bi-@(Model.IsAvailable ? "eye-slash" : "eye")-fill me-2"></i>
+                                    @(Model.IsAvailable ? "Satıştan Kaldır" : "Satışa Koy")
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12" data-aos="fade-up">
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="bi bi-arrow-left me-2"></i> Araçlara Dön
+            </a>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index" class="btn btn-secondary">Araçlara Dön</a>
-</div>
+@section Scripts {
+    <style>
+        /* Araç Detay Sayfası Stilleri */
+        .car-image-container {
+            overflow: hidden;
+            border-radius: 8px;
+            max-height: 500px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .car-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .car-image-container:hover img {
+            transform: scale(1.02);
+        }
+        
+        .discount-label {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background-color: #ffc107;
+            color: #212529;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            transform: rotate(10deg);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .features-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .feature-item {
+            background-color: #f8f9fa;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            color: #495057;
+        }
+        
+        .feature-item i {
+            color: #28a745;
+        }
+        
+        .contact-btn {
+            border-radius: 50px;
+            font-weight: 500;
+            padding: 12px;
+            transition: all 0.3s;
+        }
+        
+        .contact-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* Table Stilleri */
+        .table th {
+            width: 40%;
+            color: #495057;
+        }
+        
+        .table td {
+            font-weight: 500;
+            color: #212529;
+        }
+        
+        .card {
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
+        }
+        
+        .bg-gradient {
+            background-image: linear-gradient(to right, rgba(0,0,0,0.1), rgba(0,0,0,0));
+        }
+    </style>
+}

@@ -10,6 +10,7 @@ Bu proje, ASP.NET Core kullanılarak geliştirilmiş bir kimlik yönetimi ve ara
   <a href="#kurulum">Kurulum</a> •
   <a href="#kullanım">Kullanım</a> •
   <a href="#proje-yapısı">Proje Yapısı</a> •
+  <a href="#son-güncellemeler">Son Güncellemeler</a> •
   <a href="#ekran-görüntüleri">Ekran Görüntüleri</a> •
   <a href="#lisans">Lisans</a>
 </p>
@@ -19,7 +20,8 @@ Bu proje, ASP.NET Core kullanılarak geliştirilmiş bir kimlik yönetimi ve ara
 - 👤 **Kullanıcı Yönetimi**: Kayıt, giriş, profil düzenleme ve rol tabanlı yetkilendirme
 - 🚘 **Araç Kataloğu**: Kapsamlı araç veritabanı ve detaylı araç bilgisi
 - 🔍 **Araç Arama**: Marka, model, yıl ve daha fazla kritere göre filtreleme
-- 💖 **Favori Araçlar**: Kullanıcıların favori araçları kaydetmesi ve listelemesi
+- 💖 **Favori Araçlar**: Kullanıcıların favori araçları kaydetmesi ve listelemesi (animasyonlu etkileşimlerle)
+- 💰 **İndirim Yönetimi**: Araçlar için indirim yüzdesi tanımlama ve görüntüleme
 - 👑 **Yönetici Paneli**: Kullanıcı ve araçların yönetimi için güçlü admin arayüzü
 - 📱 **Duyarlı Tasarım**: Mobil ve masaüstü cihazlarda optimal kullanıcı deneyimi
 
@@ -93,13 +95,15 @@ Bu proje, ASP.NET Core kullanılarak geliştirilmiş bir kimlik yönetimi ve ara
 
 - **Ana Sayfa**: Tüm araçların listelendiği katalog sayfası
 - **Araç Detayları**: Her aracın detaylı bilgilerini görüntüleme
-- **Favori Araçlar**: Favori araçlarınızı kaydetme ve yönetme
+- **Favori Araçlar**: Favori araçlarınızı kaydetme ve yönetme (animasyonlu etkileşimlerle)
+- **İndirim Bilgisi**: Araçlara uygulanan indirim oranlarını görüntüleme
 - **Profil Yönetimi**: Kişisel bilgilerinizi güncelleme
 
 ### Yönetici İşlevleri
 
 - **Kullanıcı Yönetimi**: Tüm kullanıcıları görüntüleme, düzenleme ve silme
 - **Araç Yönetimi**: Araç ekleme, düzenleme ve silme
+- **İndirim Yönetimi**: Araç indirim oranlarını belirleme
 - **Rol Yönetimi**: Kullanıcı rollerini atama ve düzenleme
 
 ## 📁 Proje Yapısı
@@ -113,6 +117,17 @@ IdentityApp/
 ├── Migrations/      # Veritabanı şema değişiklikleri
 └── wwwroot/         # Statik dosyalar (CSS, JavaScript, resimler)
 ```
+
+## 🔄 Son Güncellemeler
+
+### 6 Mayıs 2025 Güncellemesi
+- **İndirim Yönetimi**: Araçlara indirim yüzdesi ekleme özelliği eklendi
+- **Favori Animasyonları**: Favori ekleme/çıkarma işlemlerine animasyonlu etkileşimler eklendi
+- **CSS İyileştirmeleri**: Kullanıcı arayüzünde çeşitli CSS iyileştirmeleri yapıldı
+- **Hata Düzeltmeleri**:
+  - Araç düzenleme sayfasında indirim yüzdesi görüntüleme sorunu giderildi
+  - CSS keyframes tanımlarında Razor sözdizimi sorunları düzeltildi
+  - Genel arayüz tutarlılığı ve performans iyileştirmeleri yapıldı
 
 ## 📸 Ekran Görüntüleri
 
