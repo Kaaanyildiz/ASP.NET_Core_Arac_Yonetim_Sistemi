@@ -1,6 +1,5 @@
 # 🚗 Araç Yönetim Sistemi
 
-![Banner](https://via.placeholder.com/800x200/0073CF/FFFFFF?text=Ara%C3%A7+Y%C3%B6netim+Sistemi)
 
 Bu proje, ASP.NET Core kullanılarak geliştirilmiş bir kimlik yönetimi ve araç takip sistemidir. Kullanıcı yönetimi, araç CRUD işlemleri ve yetkilendirme özellikleri içerir.
 
