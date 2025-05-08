@@ -209,6 +209,19 @@ namespace identityApp.Controllers
                 ViewData["IsFavorite"] = isFavorite;
             }
 
+            try
+            {
+                // Güvenli metodu kullanarak benzer araçları getir
+                ViewData["SimilarCars"] = await GetSimilarCarsWithFallback(car, 4);
+            }
+            catch (Exception ex)
+            {
+                // Hata oluşursa boş liste göster
+                ViewData["SimilarCars"] = new List<Car>();
+                // Hatayı loglama yapabilirsiniz
+                Console.WriteLine($"Benzer araçlar getirilirken hata oluştu: {ex.Message}");
+            }
+
             return View(car);
         }
 
@@ -541,23 +554,23 @@ namespace identityApp.Controllers
                 {
                     "Honda", new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
                     {
-                        { "Civic", "https://images.pexels.com/photos/17654204/pexels-photo-17654204/free-photo-of-otoparkta-siyah-honda-civic.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" }, // Honda Civic için uygun resim URL'si
-                        { "DEFAULT", "https://images.pexels.com/photos/17654204/pexels-photo-17654204/free-photo-of-otoparkta-siyah-honda-civic.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" } // Genel Honda resmi
+                        { "Civic", "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Honda_Civic_e-HEV_Sport_%28XI%29_%E2%80%93_f_30062024.jpg/500px-Honda_Civic_e-HEV_Sport_%28XI%29_%E2%80%93_f_30062024.jpg" }, // Honda Civic için uygun resim URL'si
+                        { "DEFAULT", "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Honda_Civic_e-HEV_Sport_%28XI%29_%E2%80%93_f_30062024.jpg/500px-Honda_Civic_e-HEV_Sport_%28XI%29_%E2%80%93_f_30062024.jpg" } // Genel Honda resmi
                     }
                 },
                 {
                     "Toyota", new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
                     {
-                        { "Corolla", "https://images.unsplash.com/photo-1638618164682-12b986ec2a75?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" }, // Toyota Corolla için uygun resim URL'si
-                        { "DEFAULT", "https://images.unsplash.com/photo-1638618164682-12b986ec2a75?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" } // Genel Toyota resmi
+                        { "Corolla", "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Toyota_Corolla_Limousine_Hybrid_Genf_2019_1Y7A5576.jpg/500px-Toyota_Corolla_Limousine_Hybrid_Genf_2019_1Y7A5576.jpg" }, // Toyota Corolla için uygun resim URL'si
+                        { "DEFAULT", "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Toyota_Corolla_Limousine_Hybrid_Genf_2019_1Y7A5576.jpg/500px-Toyota_Corolla_Limousine_Hybrid_Genf_2019_1Y7A5576.jpg" } // Genel Toyota resmi
                     }
                 },
                 {
                     "Tesla", new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
                     {
-                        { "Model 3", "https://images.unsplash.com/photo-1585011664466-b7bbe92f34ef?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" }, // Tesla Model 3 için uygun resim URL'si
-                        { "Model Y", "https://images.pexels.com/photos/15089585/pexels-photo-15089585/free-photo-of-araba-otomobil-arac-elektrik.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" }, // Tesla Model Y için uygun resim URL'si
-                        { "DEFAULT", "https://images.pexels.com/photos/15089585/pexels-photo-15089585/free-photo-of-araba-otomobil-arac-elektrik.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" } // Genel Tesla resmi
+                        { "Model 3", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/2019_Tesla_Model_3_Performance_AWD_Front.jpg/500px-2019_Tesla_Model_3_Performance_AWD_Front.jpg" }, // Tesla Model 3 için uygun resim URL'si
+                        { "Model Y", "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Tesla_Model_Y_1X7A6211.jpg/500px-Tesla_Model_Y_1X7A6211.jpg" }, // Tesla Model Y için uygun resim URL'si
+                        { "DEFAULT", "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Tesla_Model_Y_1X7A6211.jpg/500px-Tesla_Model_Y_1X7A6211.jpg" } // Genel Tesla resmi
                     }
                 },
                 {
@@ -639,6 +652,73 @@ namespace identityApp.Controllers
 
             // Hiçbir eşleşme bulunamadıysa, boş string döndür
             return "";
+        }
+
+        // Benzer araçları getiren metot
+        private async Task<List<Car>> GetSimilarCarsAsync(Car car, int count = 4)
+        {
+            return await _context.Cars
+                .Where(c => !c.IsDeleted && c.Id != car.Id && c.IsAvailable)
+                .Where(c => c.CarTypeId == car.CarTypeId || c.Brand == car.Brand)
+                .OrderBy(c => Guid.NewGuid()) // Rastgele sıralama
+                .Take(count)
+                .Include(c => c.CarType)
+                .ToListAsync();
+        }
+
+        // Benzer araçları bulan yardımcı metot
+        private async Task<List<Car>> GetSimilarCarsAsync(Car car)
+        {
+            // Benzer araçları çekmek için sorgu
+            var similarCars = await _context.Cars
+                .Include(c => c.CarType)
+                .Where(c => c.Id != car.Id)                      // Aynı araba olmamalı
+                .Where(c => !c.IsDeleted)                        // Silinmiş araçlar gösterilmemeli
+                .Where(c => c.IsAvailable)                       // Satılabilir durumda olmalı
+                .Where(c => c.Brand == car.Brand ||              // Marka aynı olabilir
+                            c.BodyType == car.BodyType ||        // veya kasa tipi aynı olabilir
+                            c.FuelType == car.FuelType ||        // veya yakıt tipi aynı olabilir
+                            c.Transmission == car.Transmission)  // veya vites tipi aynı olabilir
+                .Where(c => c.Price >= car.Price * 0.8m &&       // Fiyat aralığı ±%20
+                            c.Price <= car.Price * 1.2m)
+                .OrderBy(c => Guid.NewGuid())                    // Rastgele sırala
+                .Take(4)                                         // En fazla 4 benzer araç göster
+                .ToListAsync();
+
+            return similarCars;
+        }
+
+        // Benzer araçları getiren güvenli metot
+        private async Task<List<Car>> GetSimilarCarsWithFallback(Car car, int count = 4)
+        {
+            try
+            {
+                // Daha güvenli bir yaklaşım - tek sorgu ile verileri getir
+                var similarCars = await _context.Cars
+                    .Where(c => !c.IsDeleted && c.Id != car.Id && c.IsAvailable)
+                    .Where(c => c.CarTypeId == car.CarTypeId || c.Brand == car.Brand)
+                    .OrderBy(c => Guid.NewGuid()) // Rastgele sıralama
+                    .Take(count)
+                    .ToListAsync();
+                
+                // Sonra araç tiplerini yükle
+                foreach (var similarCar in similarCars)
+                {
+                    if (similarCar.CarType == null && similarCar.CarTypeId.HasValue)
+                    {
+                        similarCar.CarType = await _context.CarTypes
+                            .FirstOrDefaultAsync(ct => ct.Id == similarCar.CarTypeId);
+                    }
+                }
+                
+                return similarCars;
+            }
+            catch (Exception ex)
+            {
+                // Hata durumunda logla ve boş liste döndür
+                Console.WriteLine($"Benzer araçlar getirilirken hata oluştu: {ex.Message}");
+                return new List<Car>();
+            }
         }
     }
 }

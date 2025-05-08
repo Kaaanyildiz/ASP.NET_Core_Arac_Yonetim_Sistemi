@@ -1,14 +1,16 @@
+using identityApp.Models;
 using identityApp.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace identityApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
-        private UserManager<IdentityUser> _userManager;
-        public UsersController(UserManager<IdentityUser> userManager)
+        private UserManager<AppUser> _userManager;
+        public UsersController(UserManager<AppUser> userManager)
         {
             _userManager = userManager;
         }
@@ -27,7 +29,7 @@ namespace identityApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = model.UserName, Email = model.Email };
+                var user = new AppUser { UserName = model.UserName, Email = model.Email };
 
                 IdentityResult result = await _userManager.CreateAsync(user, model.Password);
 
