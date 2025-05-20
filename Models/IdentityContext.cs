@@ -11,6 +11,8 @@ namespace identityApp.Models
         public DbSet<Car> Cars { get; set; }
         public DbSet<CarType> CarTypes { get; set; }
         public DbSet<FavoriteCar> FavoriteCars { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Payment> Payments { get; set; }
         
         protected override void OnModelCreating(ModelBuilder builder)
         {

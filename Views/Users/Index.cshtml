@@ -1,18 +1,17 @@
 @model IEnumerable<IdentityUser>
 
-<a class="btn btn-primary" asp-action="Create"> Create Users</a>
+<a class="btn btn-primary mb-3" asp-action="Create">Kullanıcı Oluştur</a>
 <hr>
 
-<table class="table table-sm talble-border">
+<table class="table table-sm table-bordered" style="background: var(--card-bg); color: var(--text-color);">
     <thead>
         <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th></th>
+            <th>Kullanıcı ID</th>
+            <th>Kullanıcı Adı</th>
+            <th>E-posta</th>
+            <th>İşlemler</th>
         </tr>
     </thead>
-
     <tbody>
         @foreach (var user in Model)
         {
@@ -21,11 +20,10 @@
                 <td>@user.UserName</td>
                 <td>@user.Email</td>
                 <td>
-                    <a href="" class="btn btn-primary btn-sm">Edit</a>
-                    <a href="" class="btn btn-danger btn-sm">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-primary btn-sm">Düzenle</a>
+                    <a asp-action="Delete" asp-route-id="@user.Id" class="btn btn-danger btn-sm">Sil</a>
                 </td>
             </tr>
-
         }
     </tbody>
 </table>

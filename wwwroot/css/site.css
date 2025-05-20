@@ -1,52 +1,37 @@
 :root {
-  --primary-color: #3498db;
-  --primary-dark: #2980b9;
+  --primary-color: #2563eb;
+  --primary-dark: #1741a6;
   --secondary-color: #e74c3c;
   --secondary-dark: #c0392b;
   --accent-color: #f39c12;
-  --dark-color: #2c3e50;
-  --light-color: #ecf0f1;
-  --grey-color: #707b7c; /* Daha koyu gri renk */
-  --success-color: #2ecc71;
-  --info-color: #1abc9c;
-  --warning-color: #f1c40f;
-  --danger-color: #e74c3c;
-  
-  /* Yeni eklenecek gölge değişkenleri */
-  --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  --hover-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-  --button-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
-  
-  /* Yeni geçiş değişkenleri */
-  --fast-transition: 0.3s all ease;
-  --medium-transition: 0.5s all ease;
-  --slow-transition: 0.8s all ease;
-
-  /* Arka plan ve metin renkleri */
+  --dark-color: #222831;
+  --light-color: #f8f9fa;
+  --grey-color: #5a5a5a;
+  --success-color: #198754;
+  --info-color: #0dcaf0;
+  --warning-color: #ffc107;
+  --danger-color: #dc3545;
   --bg-color: #f8f9fa;
-  --text-color: #2c3e50;
-  --card-bg: #ffffff;
-  --border-color: rgba(0, 0, 0, 0.1);
+  --text-color: #181818;
+  --card-bg: #fff;
+  --border-color: #d1d5db;
 }
 
 /* Dark Mode Renkleri */
 [data-theme="dark"] {
   --primary-color: #4dabf7;
-  --primary-dark: #339af0;
+  --primary-dark: #2563eb;
   --secondary-color: #fa5252;
   --secondary-dark: #e03131;
   --accent-color: #fcc419;
-  --dark-color: #dee2e6;
-  --light-color: #212529;
-  --grey-color: #adb5bd; /* Koyu temada daha açık gri */
+  --dark-color: #e9ecef;
+  --light-color: #181818;
+  --grey-color: #b0b0b0;
   
-  --bg-color: #121212;
-  --text-color: #e9ecef;
-  --card-bg: #1e1e1e;
-  --border-color: rgba(255, 255, 255, 0.1);
-  
-  --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-  --hover-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+  --bg-color: #181818;
+  --text-color: #f8f9fa;
+  --card-bg: #23272f;
+  --border-color: #333;
 }
 
 html {

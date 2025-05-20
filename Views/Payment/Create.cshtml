@@ -1,0 +1,45 @@
+@model identityApp.Models.PaymentViewModel
+
+@{
+    ViewData["Title"] = "Ödeme";
+}
+
+<div class="container py-5 fade-in-left">
+    <h2 class="mb-4">Ödeme Yap</h2>
+    <div class="card mb-4" style="background: var(--card-bg); box-shadow: var(--card-shadow);">
+        <div class="card-body">
+            <form asp-action="Create" method="post" class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="CustomerName" class="form-label">Ad Soyad</label>
+                    <input asp-for="CustomerName" class="form-control" />
+                    <span asp-validation-for="CustomerName" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="CustomerEmail" class="form-label">E-posta</label>
+                    <input asp-for="CustomerEmail" class="form-control" />
+                    <span asp-validation-for="CustomerEmail" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="TotalAmount" class="form-label">Tutar</label>
+                    <input asp-for="TotalAmount" class="form-control" />
+                    <span asp-validation-for="TotalAmount" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="PaymentMethod" class="form-label">Ödeme Yöntemi</label>
+                    <select asp-for="PaymentMethod" class="form-select">
+                        <option value="CreditCard">Kredi Kartı</option>
+                        <option value="PayPal">PayPal</option>
+                    </select>
+                    <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Ödeme Yap</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

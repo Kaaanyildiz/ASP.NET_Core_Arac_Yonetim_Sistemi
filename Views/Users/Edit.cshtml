@@ -1,0 +1,31 @@
+@model Microsoft.AspNetCore.Identity.IdentityUser
+
+@{
+    ViewData["Title"] = "Kullanıcıyı Düzenle";
+}
+
+<div class="container py-5 fade-in-up">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card" style="background: var(--card-bg); color: var(--text-color);">
+                <div class="card-body">
+                    <h2 class="mb-4 text-center" style="color: var(--text-color);">Kullanıcıyı Düzenle</h2>
+                    <form asp-action="Edit" method="post" class="row g-3">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="col-12">
+                            <label asp-for="UserName" class="form-label" style="color: var(--text-color);"></label>
+                            <input asp-for="UserName" class="form-control" style="color: var(--text-color); background: var(--card-bg);" />
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="Email" class="form-label" style="color: var(--text-color);"></label>
+                            <input asp-for="Email" class="form-control" style="color: var(--text-color); background: var(--card-bg);" />
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary w-100">Kaydet</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

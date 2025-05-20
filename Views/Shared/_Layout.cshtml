@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
+@{ var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? ""; var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? ""; }
     <!-- Page Loader -->
     <div id="page-loader" class="page-loader">
         <div class="loader">
@@ -38,23 +39,33 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item" data-aos="fade-down" data-aos-delay="100">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">
+                            <a class="nav-link text-light @(currentController=="Home" && currentAction=="Index"?"active":"")" asp-area="" asp-controller="Home" asp-action="Index">
                                 <i class="bi bi-house-door me-1"></i>Ana Sayfa
                             </a>
                         </li>
                         <li class="nav-item" data-aos="fade-down" data-aos-delay="150">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Cars" asp-action="Index">
+                            <a class="nav-link text-light @(currentController=="Cars"?"active":"")" asp-area="" asp-controller="Cars" asp-action="Index">
                                 <i class="bi bi-car-front me-1"></i>Araçlar
                             </a>
                         </li>
                         <li class="nav-item" data-aos="fade-down" data-aos-delay="200">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="About">
+                            <a class="nav-link text-light @(currentController=="Home" && currentAction=="About"?"active":"")" asp-area="" asp-controller="Home" asp-action="About">
                                 <i class="bi bi-info-circle me-1"></i>Hakkımızda
                             </a>
                         </li>
                         <li class="nav-item" data-aos="fade-down" data-aos-delay="250">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Contact">
+                            <a class="nav-link text-light @(currentController=="Home" && currentAction=="Contact"?"active":"")" asp-area="" asp-controller="Home" asp-action="Contact">
                                 <i class="bi bi-envelope me-1"></i>İletişim
+                            </a>
+                        </li>
+                        <li class="nav-item" data-aos="fade-down" data-aos-delay="275">
+                            <a class="nav-link text-light @(currentController=="Payment"?"active":"")" asp-controller="Payment" asp-action="Create">
+                                <i class="bi bi-credit-card me-1"></i>Ödeme
+                            </a>
+                        </li>
+                        <li class="nav-item" data-aos="fade-down" data-aos-delay="300">
+                            <a class="nav-link text-light @(currentController=="OrderTracking"?"active":"")" asp-controller="OrderTracking" asp-action="Index">
+                                <i class="bi bi-clock-history me-1"></i>Sipariş Takibi
                             </a>
                         </li>
                         @if (User.IsInRole("Admin"))
@@ -80,7 +91,7 @@
                             </div>
                         </li>
                         
-                        @if (User.Identity.IsAuthenticated)
+                        @if (User.Identity?.IsAuthenticated == true)
                         {
                             <li class="nav-item" data-aos="fade-left" data-aos-delay="100">
                                 <a class="nav-link text-light" asp-controller="Cars" asp-action="MyFavorites">

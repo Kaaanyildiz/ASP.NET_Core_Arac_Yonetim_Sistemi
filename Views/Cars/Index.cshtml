@@ -19,7 +19,8 @@
     </div>
 }
 
-<div class="container mt-5">
+<div class="container py-4" id="cars-container" style="background: var(--bg-color); color: var(--text-color);">
+    <h2 class="mb-4">Araçlar</h2>
     <div class="row mb-4" data-aos="fade-up">
         <div class="col-md-12">
             <div class="card border-0 shadow">
@@ -131,7 +132,7 @@
                                 </a>
                                 
                                 <div class="ms-auto">
-                                    @if (User.Identity.IsAuthenticated)
+                                    @if (User.Identity?.IsAuthenticated == true)
                                     {
                                         <a asp-action="MyFavorites" class="btn btn-warning btn-lg">
                                             <i class="bi bi-star-fill me-2"></i> Favorilerim
@@ -225,7 +226,7 @@
                                     <p class="mt-2">Resim Yok</p>
                                 </div>
                             }
-                            @if (User.Identity.IsAuthenticated)
+                            @if (User.Identity?.IsAuthenticated == true)
                             {
                                 <form asp-action="ToggleFavorite" asp-route-id="@car.Id" method="post" class="favorite-form">
                                     <button type="submit" class="btn favorite-btn @(ViewBag.FavoriteCarIds != null && ViewBag.FavoriteCarIds.Contains(car.Id) ? "favorited" : "")">
@@ -600,6 +601,115 @@
         .badge {
             padding: 0.35em 0.65em;
             font-weight: 600;
+        }
+
+        /* Yüksek kontrastlı tema stilleri */
+        :root {
+            --card-bg: #212529;
+            --text-color: #f8f9fa;
+            --primary: #0d6efd;
+            --primary-hover: #0b5ed7;
+            --secondary: #6c757d;
+            --success: #198754;
+            --info: #0dcaf0;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #212529;
+        }
+        
+        body {
+            background-color: #121212;
+            color: #f8f9fa;
+        }
+        
+        .table {
+            background: var(--card-bg);
+            color: var(--text-color);
+        }
+        
+        .table th {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--primary);
+        }
+        
+        .table td, .table th {
+            padding: 1rem;
+            vertical-align: middle;
+        }
+        
+        .alert {
+            border-radius: 0.5rem;
+        }
+        
+        .alert-success {
+            background-color: rgba(25, 135, 84, 0.1);
+            color: #198754;
+        }
+        
+        .alert-info {
+            background-color: rgba(23, 162, 184, 0.1);
+            color: #0dcaf0;
+        }
+        
+        .alert-warning {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: #ffc107;
+        }
+        
+        .alert-danger {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .card-header {
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+            border: none;
+        }
+        
+        .btn-success {
+            background: var(--success);
+            border: none;
+        }
+        
+        .btn-info {
+            background: var(--info);
+            border: none;
+        }
+        
+        .btn-warning {
+            background: var(--warning);
+            border: none;
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            border: none;
+        }
+        
+        .badge {
+            background: var(--primary);
+            color: var(--text-color);
         }
     </style>
 }

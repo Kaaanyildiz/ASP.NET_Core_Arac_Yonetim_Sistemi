@@ -46,5 +46,57 @@ namespace identityApp.Controllers
             }
             return View(model);
         }
+
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (id == null)
+                return NotFound();
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                return NotFound();
+            return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, IdentityUser model)
+        {
+            if (id != model.Id)
+                return NotFound();
+            if (!ModelState.IsValid)
+                return View(model);
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                return NotFound();
+            user.UserName = model.UserName;
+            user.Email = model.Email;
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+                return RedirectToAction("Index");
+            foreach (var err in result.Errors)
+                ModelState.AddModelError("", err.Description);
+            return View(model);
+        }
+
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (id == null)
+                return NotFound();
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                return NotFound();
+            return View(user);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                return NotFound();
+            await _userManager.DeleteAsync(user);
+            return RedirectToAction("Index");
+        }
     }
 }

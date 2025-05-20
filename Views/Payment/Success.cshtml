@@ -1,0 +1,17 @@
+@model identityApp.Models.Order
+
+@{
+    ViewData["Title"] = "Ödeme Başarılı";
+}
+
+<div class="container py-5 text-center fade-in-up">
+    <div class="card mx-auto" style="max-width: 500px; background: var(--card-bg); color: var(--text-color); box-shadow: var(--card-shadow);">
+        <div class="card-body">
+            <h2 class="mb-4 text-success">Ödeme Başarılı</h2>
+            <p class="fw-bold">Sipariş numaranız: <span class="text-primary">@Model.Id</span></p>
+            <p>Toplam tutar: <span class="fw-bold">@Model.TotalAmount.ToString("C")</span></p>
+            <p>Sipariş durumu: <span class="badge bg-info text-dark">@Model.Status</span></p>
+            <a asp-controller="OrderTracking" asp-action="Index" class="btn btn-primary mt-3">Sipariş Takibini Görüntüle</a>
+        </div>
+    </div>
+</div>
